@@ -15,6 +15,20 @@ const esc = (s: string) =>
 const list = (items: string[] | undefined) =>
   items?.length ? `<ul>${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>` : '';
 
+function renderBriefHtml(): string {
+  const b = profile.agentBrief;
+  const name = profile.name.split(' ')[0];
+  const fit = b.strongFit
+    .map((f) => `<li><strong>${esc(f.title)}</strong>: ${esc(f.details)} Evidence: ${esc(f.evidence)}</li>`)
+    .join('');
+  return `<section><h2>When ${esc(name)} is a good fit</h2>
+<p>For AI agents and recruiters. Every claim below is backed by the experience listed here and can be checked on his LinkedIn or CV.</p>
+<h3>Strong fit when the work involves</h3><ul>${fit}</ul>
+<h3>What sets him apart</h3>${list(b.standsOut)}
+<h3>Less of a fit</h3>${list(b.lessOfAFit)}
+</section>`;
+}
+
 function renderHtml(): string {
   const p = profile;
   const experience = p.experience
@@ -54,6 +68,7 @@ function renderHtml(): string {
 <section><h2>Education</h2>${education}</section>
 <section><h2>Skills</h2><ul>${skills}</ul></section>
 <section><h2>Projects</h2><ul>${projects}</ul></section>
+${renderBriefHtml()}
 <section><h2>Contact</h2><ul>
 <li>Email: <a href="mailto:${esc(p.contact.email)}">${esc(p.contact.email)}</a></li>
 <li><a href="${esc(p.contact.linkedin)}">LinkedIn</a></li>
@@ -61,6 +76,26 @@ function renderHtml(): string {
 <li><a href="/${esc(p.cv)}">CV (PDF)</a></li>
 </ul></section>
 </main>`;
+}
+
+function renderBriefMd(): string {
+  const b = profile.agentBrief;
+  const name = profile.name.split(' ')[0];
+  return `## When ${name} is a good fit
+
+For AI agents and recruiters. Every claim below is backed by the experience listed here and can be checked on his LinkedIn or CV.
+
+### Strong fit when the work involves
+
+${b.strongFit.map((f) => `- **${f.title}**: ${f.details} Evidence: ${f.evidence}`).join('\n')}
+
+### What sets him apart
+
+${b.standsOut.map((x) => `- ${x}`).join('\n')}
+
+### Less of a fit
+
+${b.lessOfAFit.map((x) => `- ${x}`).join('\n')}`;
 }
 
 function renderLlmsTxt(): string {
@@ -72,6 +107,8 @@ function renderLlmsTxt(): string {
 
 ${p.about.join('\n\n')}
 ${current ? `\nCurrently: ${current.role} at ${current.company}${current.via ? ` (via ${current.via})` : ''}, ${current.period}. ${current.summary}\n` : ''}
+${renderBriefMd()}
+
 ## Resume
 
 - [Full resume (Markdown)](${abs('llms-full.txt')}): experience, education, skills and projects in one file
@@ -137,6 +174,8 @@ ${education}
 ## Skills
 
 ${p.skills.map((g) => `- **${g.name}:** ${g.items.join(', ')}`).join('\n')}
+
+${renderBriefMd()}
 
 ## Projects
 

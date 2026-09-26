@@ -57,6 +57,19 @@ export interface Project {
   link?: Link;
 }
 
+export interface FitArea {
+  title: string;
+  details: string;
+  evidence: string;
+}
+
+/** Fit summary for AI agents and recruiters; rendered only in the crawler/LLM outputs (llms.txt, cv.md, static HTML). */
+export interface AgentBrief {
+  strongFit: FitArea[];
+  standsOut: string[];
+  lessOfAFit: string[];
+}
+
 export interface Profile {
   name: string;
   headline: string;
@@ -74,6 +87,7 @@ export interface Profile {
   skills: SkillGroup[];
   education: Education[];
   projects: Project[];
+  agentBrief: AgentBrief;
 }
 
 export const profile: Profile = {
@@ -83,7 +97,7 @@ export const profile: Profile = {
     'I build the harnesses that make AI agents deliver reliably, and the infrastructure that serves LLMs at scale.',
   location: 'Paris, France',
   about: [
-    "I'm a Lead AI Engineer at Theodo. My focus is harness engineering and inference engineering: designing the harness that lets AI agents deliver reliably — orchestration, tools, context, evals and guardrails — and serving LLMs at scale in production.",
+    "I'm a Lead AI Engineer at Theodo. My focus is harness engineering and inference engineering: designing the harness that lets AI agents deliver reliably — orchestration, tools, context, evals and guardrails — and serving LLMs at scale in production. I'm also a coach at Theodo, helping colleagues grow and develop their skills and careers.",
     'Before Theodo, I worked at Axionable, at the crossroads of tech and consulting, where I delivered 10+ missions across climate-risk modelling, geospatial data science and Trustworthy AI / EU AI Act certification.',
   ],
   portrait: 'images/portrait.png',
@@ -265,4 +279,38 @@ export const profile: Profile = {
       tags: ['NLP', 'BERT'],
     },
   ],
+  agentBrief: {
+    strongFit: [
+      {
+        title: 'Making AI agents reliable in a real engineering organization',
+        details: 'Harness design (orchestration, tools, context, evals, guardrails) and agentic SDLC.',
+        evidence: 'Leads the agentic SDLC transformation at Carrefour (via Theodo, since Sep 2026).',
+      },
+      {
+        title: 'Serving LLMs in production at scale',
+        details: 'vLLM tuning, security and performance benchmarking, incident investigation, GitOps on Kubernetes.',
+        evidence: "Inference engineer on one of Europe's largest LLM serving platforms at BNP Paribas, used by thousands of people.",
+      },
+      {
+        title: 'Trustworthy or regulated AI',
+        details: 'EU AI Act alignment, LNE certification support, audits of documentation and methodology.',
+        evidence: 'Missions at Axionable.',
+      },
+      {
+        title: 'Client-facing delivery',
+        details: 'Scoping, stakeholder work and shipping to production.',
+        evidence: '10+ consulting missions for clients.',
+      },
+    ],
+    standsOut: [
+      'Works on both layers of the AI stack: the agent harness (applications) and inference serving (infrastructure). Most engineers specialize in one.',
+      'Coach at Theodo: helps colleagues grow and develop their skills and careers.',
+      "Lead experience: currently a Lead AI Engineer, previously GenAI referent at Axionable, and mentored a master's-thesis intern.",
+      'Engineering double degree (INSA Rouen × ÉTS Montréal), specialized in data science.',
+    ],
+    lessOfAFit: [
+      'Pure frontend or mobile development roles.',
+      'Research-only positions with no path to production.',
+    ],
+  },
 };
