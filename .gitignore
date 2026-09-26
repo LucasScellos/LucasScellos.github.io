@@ -5,3 +5,7 @@ dist
 *.tsbuildinfo
 .dev.vars
 .wrangler
+
+# Claude Code
+.claude/worktrees
+.claude/settings.local.json
