@@ -8,8 +8,9 @@ import {
   useTransform,
   type MotionValue,
 } from 'framer-motion';
-import { chapters, kindLabel, type Chapter } from '../data/chapters';
+import { chapterIds, type Chapter } from '../data/chapters';
 import { useRichMotion } from '../hooks';
+import { useI18n } from '../i18n';
 import { fadeUp, inView, stagger } from '../motion';
 import ChapterDialog from './ChapterDialog';
 import { ArrowUpRight } from './Icons';
@@ -23,7 +24,7 @@ const FRAME_GAP = DEPTH / 2;
 const START = 0.03;
 const END = 0.95;
 
-const N = chapters.length;
+const N = chapterIds.length;
 /** Share of each chapter's scroll range spent holding still on it. */
 const DWELL = 0.22;
 
@@ -40,10 +41,11 @@ const startYear = (c: Chapter) => (c.period.match(/\d{4}/g) ?? [''])[0];
 
 const idFromUrl = () => {
   const id = new URLSearchParams(window.location.search).get('chapter');
-  return id && chapters.some((c) => c.id === id) ? id : null;
+  return id && chapterIds.includes(id) ? id : null;
 };
 
 function CardBody({ chapter, index }: { chapter: Chapter; index: number }) {
+  const { t } = useI18n();
   return (
     <>
       <span className="tcard-index" aria-hidden="true">
@@ -51,21 +53,21 @@ function CardBody({ chapter, index }: { chapter: Chapter; index: number }) {
       </span>
       <span className="tcard-top">
         <span className="card-kind">
-          {kindLabel[chapter.kind]}
-          {chapter.current && <span className="badge-now">Now</span>}
+          {t.kind[chapter.kind]}
+          {chapter.current && <span className="badge-now">{t.now}</span>}
         </span>
         <span className="card-period">{chapter.period}</span>
       </span>
       <span className="tcard-org">{chapter.org}</span>
       <span className="tcard-title">
         {chapter.title}
-        {chapter.via && <span className="tcard-via"> · via {chapter.via}</span>}
+        {chapter.via && <span className="tcard-via"> · {t.via} {chapter.via}</span>}
       </span>
       <span id={`summary-${chapter.id}`} className="tcard-summary">
         {chapter.summary}
       </span>
       <span className="tcard-more" aria-hidden="true">
-        Open chapter <ArrowUpRight width={16} height={16} />
+        {t.openChapter} <ArrowUpRight width={16} height={16} />
       </span>
     </>
   );
@@ -126,6 +128,7 @@ function Frame({ k, camera }: { k: number; camera: MotionValue<number> }) {
 
 export default function Tunnel() {
   const rich = useRichMotion();
+  const { t, chapters } = useI18n();
   const outer = useRef<HTMLDivElement>(null);
   const cardRefs = useRef(new Map<string, HTMLButtonElement>());
   const [openId, setOpenId] = useState<string | null>(idFromUrl);
@@ -192,10 +195,10 @@ export default function Tunnel() {
       <section id="work" className="tunnel-static container" aria-labelledby="work-title">
         <motion.header className="section-head" {...inView} variants={stagger(0.08)}>
           <motion.h2 id="work-title" className="section-title" variants={fadeUp}>
-            Chapters
+            {t.chapters}
           </motion.h2>
           <motion.p className="section-sub" variants={fadeUp}>
-            Where I work now, back to where it all started.
+            {t.chaptersSub}
           </motion.p>
         </motion.header>
         <ul className="static-list">
@@ -227,9 +230,9 @@ export default function Tunnel() {
           <div className="tunnel-overlay container">
             <div>
               <h2 id="work-title" className="kicker">
-                Chapters
+                {t.chapters}
               </h2>
-              <p className="tunnel-hint">Scroll to fly through my career · open any chapter</p>
+              <p className="tunnel-hint">{t.tunnelHint}</p>
             </div>
             <p className="tunnel-counter" aria-live="polite">
               <span className="tunnel-counter-now">{String(active + 1).padStart(2, '0')}</span>
@@ -255,7 +258,7 @@ export default function Tunnel() {
             ))}
           </div>
 
-          <nav className="tunnel-rail" aria-label="Jump to a chapter">
+          <nav className="tunnel-rail" aria-label={t.jumpToChapter}>
             <div className="rail-line">
               <motion.span className="rail-dot" style={{ top: railY }} />
             </div>
@@ -269,7 +272,7 @@ export default function Tunnel() {
                     onClick={() => travelTo(i)}
                     aria-label={`${c.org}, ${c.period}`}
                   >
-                    <span className="rail-year">{c.current ? 'Now' : startYear(c)}</span>
+                    <span className="rail-year">{c.current ? t.now : startYear(c)}</span>
                     <span className="rail-org">{c.org}</span>
                   </button>
                 </li>

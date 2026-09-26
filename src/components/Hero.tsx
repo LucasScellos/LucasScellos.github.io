@@ -9,7 +9,7 @@ import {
   transform,
   type MotionValue,
 } from 'framer-motion';
-import { profile } from '../data/profile';
+import { useI18n } from '../i18n';
 import { useCssVars, useFinePointer, useRichMotion } from '../hooks';
 import { ease, fadeUp, stagger } from '../motion';
 import { chatEnabled, openChat } from './ChatWidget';
@@ -65,6 +65,7 @@ function Letter({ char, px, py, index, colors }: LetterProps) {
 export default function Hero() {
   const rich = useRichMotion();
   const fine = useFinePointer();
+  const { t, profile } = useI18n();
   const ref = useRef<HTMLElement>(null);
   const [role, focus] = profile.headline.split(' — ');
   const words = profile.name.split(' ');
@@ -155,12 +156,12 @@ export default function Hero() {
             {chatEnabled && (
               <button type="button" className="btn btn-accent" onClick={openChat}>
                 <ChatIcon />
-                Talk with me
+                {t.talkWithMe}
               </button>
             )}
             <a className="btn btn-outline" href={profile.cv} download>
               <DownloadIcon />
-              Download CV
+              {t.downloadCv}
             </a>
             <a className="icon-btn" href={profile.contact.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">
               <LinkedInIcon />
@@ -176,10 +177,10 @@ export default function Hero() {
         href="#about"
         className="scroll-cue"
         style={rich ? { opacity: restOpacity } : undefined}
-        aria-label="Scroll to about"
+        aria-label={t.scrollCueLabel}
       >
         <span className="scroll-cue-line" />
-        Scroll to travel
+        {t.scrollCue}
       </motion.a>
     </section>
   );

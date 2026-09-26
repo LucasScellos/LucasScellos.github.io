@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion';
-import { profile } from '../data/profile';
+import { useI18n } from '../i18n';
 import { useRichMotion } from '../hooks';
 import { fadeUp, inView, stagger } from '../motion';
 
@@ -17,6 +17,7 @@ function Word({ word, progress, range }: { word: string; progress: MotionValue<n
 /** The lead paragraph lights up word by word as it scrolls through the viewport. */
 export default function About() {
   const rich = useRichMotion();
+  const { t, profile } = useI18n();
   const ref = useRef<HTMLParagraphElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.85', 'end 0.45'] });
   const [lead, ...rest] = profile.about;
@@ -25,7 +26,7 @@ export default function About() {
   return (
     <section id="about" className="about container" aria-labelledby="about-title">
       <h2 id="about-title" className="kicker">
-        About
+        {t.about}
       </h2>
       <p ref={ref} className="about-lead">
         {rich

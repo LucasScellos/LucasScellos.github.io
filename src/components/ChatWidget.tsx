@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Fragment, useCallback, useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { profile } from '../data/profile';
+import { STRINGS, useI18n, type Strings } from '../i18n';
 import { ChatIcon, CloseIcon, SendIcon } from './Icons';
 
 // Chat proxy (worker/). The OpenRouter key lives there, never in the browser.
@@ -21,25 +22,23 @@ interface Message {
   content: string;
 }
 
-const firstName = profile.name.split(' ')[0];
-const GREETING: Message = {
-  role: 'assistant',
-  content: `Hi! I'm ${firstName}'s assistant. Ask me anything about his experience, skills or projects — in English or French.`,
-};
-const SUGGESTIONS = [
-  'What is he working on now?',
-  'Tell me about his LLM inference work',
-  'Why hire him for an AI platform?',
-  'Quelles sont ses compétences ?',
-];
+type ChatStrings = Strings['chat'];
 
-function loadHistory(): Message[] {
+/** The opening message is UI, not conversation: it's shown in the current language and never sent. */
+const isGreeting = (m: Message) =>
+  m.role === 'assistant' && Object.values(STRINGS).some((s) => s.chat.greeting === m.content);
+const greeting = (t: ChatStrings): Message => ({ role: 'assistant', content: t.greeting });
+
+/** An error whose message is safe to show as is. */
+class ChatError extends Error {}
+
+function loadHistory(t: ChatStrings): Message[] {
   try {
     const raw = sessionStorage.getItem(STORAGE_KEY);
     const parsed = raw ? (JSON.parse(raw) as Message[]) : null;
-    return Array.isArray(parsed) && parsed.length ? parsed : [GREETING];
+    return Array.isArray(parsed) && parsed.length ? parsed : [greeting(t)];
   } catch {
-    return [GREETING];
+    return [greeting(t)];
   }
 }
 
@@ -74,16 +73,16 @@ function renderText(text: string): ReactNode {
   });
 }
 
-async function streamReply(history: Message[], onToken: (t: string) => void, signal: AbortSignal) {
+async function streamReply(history: Message[], onToken: (token: string) => void, signal: AbortSignal, t: ChatStrings) {
   const res = await fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages: history.filter((m) => m !== GREETING && m.content !== GREETING.content) }),
+    body: JSON.stringify({ messages: history.filter((m) => !isGreeting(m)) }),
     signal,
   });
   if (!res.ok || !res.body) {
     const body = (await res.json().catch(() => null)) as { error?: string } | null;
-    throw new Error(body?.error ?? 'The assistant is unavailable right now.');
+    throw new ChatError(body?.error ?? t.unavailable);
   }
 
   const reader = res.body.getReader();
@@ -101,19 +100,21 @@ async function streamReply(history: Message[], onToken: (t: string) => void, sig
       if (data === '[DONE]') return;
       try {
         const chunk = JSON.parse(data);
-        if (chunk.error) throw new Error('The assistant hit an error. Please try again.');
+        if (chunk.error) throw new ChatError(t.upstreamError);
         const token: string | undefined = chunk.choices?.[0]?.delta?.content;
         if (token) onToken(token);
       } catch (e) {
-        if (e instanceof Error && e.message.startsWith('The assistant')) throw e;
+        if (e instanceof ChatError) throw e;
       }
     }
   }
 }
 
 export default function ChatWidget() {
+  const { t: all } = useI18n();
+  const t = all.chat;
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>(loadHistory);
+  const [messages, setMessages] = useState<Message[]>(() => loadHistory(t));
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -181,10 +182,11 @@ export default function ChatWidget() {
             });
           },
           controller.signal,
+          t,
         );
       } catch (e) {
-        if (timedOut) setError('The assistant is taking too long — please try again.');
-        else if (!controller.signal.aborted) setError(e instanceof Error ? e.message : 'Something went wrong.');
+        if (timedOut) setError(t.tooLong);
+        else if (!controller.signal.aborted) setError(e instanceof Error ? e.message : t.genericError);
       } finally {
         clearTimeout(idle);
         // Drop an empty assistant bubble if nothing came back.
@@ -192,7 +194,7 @@ export default function ChatWidget() {
         setBusy(false);
       }
     },
-    [busy, messages],
+    [busy, messages, t],
   );
 
   const onSubmit = (e: FormEvent) => {
@@ -202,7 +204,7 @@ export default function ChatWidget() {
 
   const reset = () => {
     abortRef.current?.abort();
-    setMessages([GREETING]);
+    setMessages([greeting(t)]);
     setError(null);
   };
 
@@ -230,7 +232,7 @@ export default function ChatWidget() {
             aria-haspopup="dialog"
           >
             <ChatIcon width={20} height={20} />
-            <span>Talk with me</span>
+            <span>{all.talkWithMe}</span>
           </motion.button>
         )}
       </AnimatePresence>
@@ -251,15 +253,15 @@ export default function ChatWidget() {
             <header className="chat-header">
               <img className="chat-avatar" src={profile.portrait} alt="" width={36} height={36} />
               <div className="chat-heading">
-                <h2 id="chat-title">Talk with {firstName}</h2>
-                <p>AI assistant · answers from his profile</p>
+                <h2 id="chat-title">{t.title}</h2>
+                <p>{t.subtitle}</p>
               </div>
               {messages.length > 1 && (
                 <button type="button" className="chat-text-btn" onClick={reset}>
-                  New chat
+                  {t.newChat}
                 </button>
               )}
-              <button type="button" className="chat-close" onClick={() => setOpen(false)} aria-label="Close chat">
+              <button type="button" className="chat-close" onClick={() => setOpen(false)} aria-label={t.close}>
                 <CloseIcon />
               </button>
             </header>
@@ -274,12 +276,12 @@ export default function ChatWidget() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.25 }}
                   >
-                    {m.role === 'assistant' ? renderText(m.content) : m.content}
+                    {isGreeting(m) ? renderText(t.greeting) : m.role === 'assistant' ? renderText(m.content) : m.content}
                   </motion.div>
                 ) : null,
               )}
               {waiting && (
-                <div className="chat-msg chat-msg-assistant chat-typing" aria-label="Assistant is typing">
+                <div className="chat-msg chat-msg-assistant chat-typing" aria-label={t.typing}>
                   <span />
                   <span />
                   <span />
@@ -288,12 +290,12 @@ export default function ChatWidget() {
               {error && (
                 <div className="chat-error" role="alert">
                   {error}{' '}
-                  <a href={`mailto:${profile.contact.email}`}>Email {firstName} instead</a>
+                  <a href={`mailto:${profile.contact.email}`}>{t.emailInstead}</a>
                 </div>
               )}
               {showSuggestions && (
                 <div className="chat-suggestions">
-                  {SUGGESTIONS.map((s) => (
+                  {t.suggestions.map((s) => (
                     <button key={s} type="button" onClick={() => void send(s)}>
                       {s}
                     </button>
@@ -304,7 +306,7 @@ export default function ChatWidget() {
 
             <form className="chat-form" onSubmit={onSubmit}>
               <label htmlFor="chat-input" className="visually-hidden">
-                Your question
+                {t.inputLabel}
               </label>
               <textarea
                 id="chat-input"
@@ -312,7 +314,7 @@ export default function ChatWidget() {
                 rows={1}
                 value={input}
                 maxLength={1500}
-                placeholder={`Ask about ${firstName}…`}
+                placeholder={t.placeholder}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
@@ -321,11 +323,11 @@ export default function ChatWidget() {
                   }
                 }}
               />
-              <button type="submit" className="chat-send" disabled={busy || !input.trim()} aria-label="Send">
+              <button type="submit" className="chat-send" disabled={busy || !input.trim()} aria-label={t.send}>
                 <SendIcon />
               </button>
             </form>
-            <p className="chat-disclaimer">AI-generated answers can be wrong — check the CV for details.</p>
+            <p className="chat-disclaimer">{t.disclaimer}</p>
           </motion.div>
         )}
       </AnimatePresence>

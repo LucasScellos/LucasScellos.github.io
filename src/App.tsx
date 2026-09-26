@@ -7,12 +7,14 @@ import Projects from './components/Projects';
 import Contact from './components/Contact';
 import ChatWidget from './components/ChatWidget';
 import Cursor from './components/Cursor';
+import { useI18n } from './i18n';
 
 export default function App() {
+  const { t } = useI18n();
   return (
     <>
       <a className="skip-link" href="#main">
-        Skip to content
+        {t.skipToContent}
       </a>
       <TopBar />
       <main id="main">

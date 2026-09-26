@@ -1,5 +1,6 @@
 // Experience and education, flattened into one newest → oldest list of "chapters".
-import { profile } from './profile';
+import { profile as profileEn, type Profile } from './profile';
+import type { Strings } from '../i18n';
 
 export type ChapterKind = 'work' | 'education';
 
@@ -28,7 +29,7 @@ export interface Chapter {
   tags?: string[];
 }
 
-export const chapters: Chapter[] = [
+export const buildChapters = (profile: Profile, t: Strings): Chapter[] => [
   ...profile.experience.map<Chapter>((e) => ({
     id: e.id,
     kind: 'work',
@@ -40,7 +41,7 @@ export const chapters: Chapter[] = [
     summary: e.summary,
     current: e.current,
     highlights: e.highlights,
-    items: e.missions?.length ? { label: 'Selected missions', list: e.missions } : undefined,
+    items: e.missions?.length ? { label: t.selectedMissions, list: e.missions } : undefined,
     tags: e.tags,
   })),
   ...profile.education.map<Chapter>((e) => ({
@@ -50,18 +51,16 @@ export const chapters: Chapter[] = [
     title: e.degree,
     org: e.school,
     summary: e.summary,
-    note: e.exchange ? `+ ${e.exchange.school} exchange, ${e.exchange.period}` : undefined,
+    note: e.exchange ? t.exchangeNote(e.exchange.school, e.exchange.period) : undefined,
     highlights: e.details ? [e.details] : undefined,
     items: e.exchange
       ? {
-          label: 'Exchange',
+          label: t.exchange,
           list: [{ title: `${e.exchange.degree} — ${e.exchange.school}`, period: e.exchange.period }],
         }
       : undefined,
   })),
 ];
 
-export const kindLabel: Record<ChapterKind, string> = {
-  work: 'Work',
-  education: 'Education',
-};
+/** Chapter ids, newest → oldest; the same in every language. */
+export const chapterIds = [...profileEn.experience, ...profileEn.education].map((e) => e.id);

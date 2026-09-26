@@ -15,6 +15,14 @@
         try { t = localStorage.getItem('theme-v2'); } catch (e) {}
         document.documentElement.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light');
         document.documentElement.classList.add('js');
+        // Saved language, else the browser's preferred one (French or English).
+        var l = null;
+        try { l = localStorage.getItem('lang'); } catch (e) {}
+        if (l !== 'fr' && l !== 'en') {
+          var n = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+          l = /^fr\b/i.test(n) ? 'fr' : 'en';
+        }
+        document.documentElement.lang = l;
       })();
     </script>
     <!-- #root ships a plain-HTML copy of the content for crawlers and agents; React replaces it on mount. -->

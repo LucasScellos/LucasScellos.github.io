@@ -1,15 +1,16 @@
 import { motion } from 'framer-motion';
-import { profile } from '../data/profile';
+import { useI18n } from '../i18n';
 import { fadeUp, inView, stagger } from '../motion';
 import { ArrowUpRight, DownloadIcon, GitHubIcon, LinkedInIcon } from './Icons';
 
 export default function Contact() {
+  const { t, profile } = useI18n();
   const { email, linkedin, github } = profile.contact;
   return (
     <footer id="contact" className="contact container" aria-labelledby="contact-title">
       <motion.div className="contact-inner" {...inView} variants={stagger(0.08)}>
         <motion.h2 id="contact-title" className="contact-title" variants={fadeUp}>
-          Let’s talk.
+          {t.letsTalk}
         </motion.h2>
         <motion.a className="contact-email" href={`mailto:${email}`} variants={fadeUp}>
           {email}
@@ -28,7 +29,7 @@ export default function Contact() {
           </li>
           <li>
             <a href={profile.cv} download>
-              <DownloadIcon /> CV (PDF)
+              <DownloadIcon /> {t.cvPdf}
             </a>
           </li>
         </motion.ul>

@@ -1,6 +1,7 @@
 import { type PointerEvent as ReactPointerEvent } from 'react';
 import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { profile, type Project } from '../data/profile';
+import { type Project } from '../data/profile';
+import { useI18n } from '../i18n';
 import { useFinePointer, useRichMotion } from '../hooks';
 import { fadeUp, inView, stagger } from '../motion';
 import { ArrowUpRight } from './Icons';
@@ -10,6 +11,7 @@ function TiltCard({ project }: { project: Project }) {
   const rich = useRichMotion();
   const fine = useFinePointer();
   const tilt = rich && fine;
+  const { t } = useI18n();
   // Pointer position inside the card, 0 → 1 on each axis.
   const mx = useMotionValue(0.5);
   const my = useMotionValue(0.5);
@@ -38,7 +40,7 @@ function TiltCard({ project }: { project: Project }) {
     <>
       <motion.span className="pcard-sheen" aria-hidden="true" style={{ background: sheen, opacity: sheenOpacity }} />
       <span className="pcard-top">
-        <span className="pcard-year">{project.year ?? 'Ongoing'}</span>
+        <span className="pcard-year">{project.year ?? t.ongoing}</span>
         {project.link && (
           <span className="pcard-arrow" aria-hidden="true">
             <ArrowUpRight width={18} height={18} />
@@ -77,19 +79,21 @@ function TiltCard({ project }: { project: Project }) {
 }
 
 export default function Projects() {
+  const { t, profile } = useI18n();
   return (
     <section id="projects" className="projects container" aria-labelledby="projects-title">
       <motion.header className="section-head" {...inView} variants={stagger(0.08)}>
         <motion.h2 id="projects-title" className="kicker" variants={fadeUp}>
-          Side projects
+          {t.sideProjects}
         </motion.h2>
         <motion.p className="section-title" variants={fadeUp}>
-          Things I build <em>for the fun of it.</em>
+          {t.projectsTitle[0]}
+          <em>{t.projectsTitle[1]}</em>
         </motion.p>
       </motion.header>
       <motion.ul className="pcard-grid" {...inView} viewport={{ once: true, amount: 0.1 }} variants={stagger(0.08)}>
         {profile.projects.map((p) => (
-          <TiltCard key={p.name} project={p} />
+          <TiltCard key={p.link?.href ?? p.name} project={p} />
         ))}
       </motion.ul>
     </section>

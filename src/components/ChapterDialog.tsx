@@ -1,8 +1,9 @@
 import { useEffect, useRef, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { chapters, kindLabel, type Chapter } from '../data/chapters';
+import { chapterIds, type Chapter } from '../data/chapters';
 import { useScrollLock } from '../hooks';
+import { useI18n } from '../i18n';
 import { ease, morphSpring } from '../motion';
 import { ArrowLeft, ArrowRight, CloseIcon } from './Icons';
 
@@ -37,12 +38,13 @@ export default function ChapterDialog({
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { t } = useI18n();
   const open = Boolean(chapter);
   useScrollLock(open);
 
   // Slide direction when paging between chapters (newer = left, older = right).
   const lastIndex = useRef(-1);
-  const index = chapter ? chapters.indexOf(chapter) : -1;
+  const index = chapter ? chapterIds.indexOf(chapter.id) : -1;
   const direction = lastIndex.current === -1 || index === lastIndex.current ? 0 : index > lastIndex.current ? 1 : -1;
   useEffect(() => {
     lastIndex.current = index;
@@ -115,7 +117,7 @@ export default function ChapterDialog({
               type="button"
               className="dialog-close icon-btn"
               onClick={onClose}
-              aria-label="Close chapter"
+              aria-label={t.closeChapter}
             >
               <CloseIcon />
             </motion.button>
@@ -139,8 +141,8 @@ export default function ChapterDialog({
                   <header className="dialog-head">
                     <p className="dialog-meta">
                       <motion.span layoutId={lid('kind')} className="card-kind">
-                        {kindLabel[chapter.kind]}
-                        {chapter.current && <span className="badge-now">Now</span>}
+                        {t.kind[chapter.kind]}
+                        {chapter.current && <span className="badge-now">{t.now}</span>}
                       </motion.span>
                       <motion.span layoutId={lid('period')} className="card-period">
                         {chapter.period}
@@ -154,7 +156,7 @@ export default function ChapterDialog({
                     </motion.p>
                     {(chapter.via || chapter.location) && (
                       <p className="dialog-place">
-                        {[chapter.via && `via ${chapter.via}`, chapter.location].filter(Boolean).join(' · ')}
+                        {[chapter.via && `${t.via} ${chapter.via}`, chapter.location].filter(Boolean).join(' · ')}
                       </p>
                     )}
                   </header>
@@ -168,8 +170,8 @@ export default function ChapterDialog({
                     <p className="dialog-summary">{chapter.summary}</p>
 
                     {chapter.highlights && chapter.highlights.length > 0 && (
-                      <section className="dialog-block" aria-label="Highlights">
-                        <h3 className="block-label">Highlights</h3>
+                      <section className="dialog-block" aria-label={t.highlights}>
+                        <h3 className="block-label">{t.highlights}</h3>
                         <ul className="highlights">
                           {chapter.highlights.map((h) => (
                             <li key={h}>{h}</li>
@@ -194,7 +196,7 @@ export default function ChapterDialog({
                     )}
 
                     {chapter.tags && chapter.tags.length > 0 && (
-                      <ul className="tags" aria-label="Tags">
+                      <ul className="tags" aria-label={t.tags}>
                         {chapter.tags.map((t) => (
                           <li key={t}>{t}</li>
                         ))}
@@ -205,12 +207,12 @@ export default function ChapterDialog({
               </AnimatePresence>
             </motion.div>
 
-            <motion.nav layout="position" className="dialog-nav" aria-label="Other chapters">
+            <motion.nav layout="position" className="dialog-nav" aria-label={t.otherChapters}>
               {prev ? (
                 <button type="button" className="pager" onClick={onPrev}>
                   <ArrowLeft />
                   <span className="pager-text">
-                    <span className="pager-hint">Newer</span>
+                    <span className="pager-hint">{t.newer}</span>
                     <span className="pager-name">{prev.org}</span>
                   </span>
                 </button>
@@ -220,7 +222,7 @@ export default function ChapterDialog({
               {next ? (
                 <button type="button" className="pager pager-next" onClick={onNext}>
                   <span className="pager-text">
-                    <span className="pager-hint">Older</span>
+                    <span className="pager-hint">{t.older}</span>
                     <span className="pager-name">{next.org}</span>
                   </span>
                   <ArrowRight />

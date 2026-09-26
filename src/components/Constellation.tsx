@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { LayoutGroup, motion } from 'framer-motion';
 import { profile } from '../data/profile';
 import { fadeUp, inView, morphSpring, stagger } from '../motion';
+import { useI18n } from '../i18n';
 
 interface Star {
   name: string;
@@ -14,6 +15,7 @@ interface Star {
   duration: number;
 }
 
+// Skill names are the same in every language (only group names are translated), so the cloud is built once.
 // Golden-angle spiral: an even, organic spread with no overlaps.
 const all = profile.skills.flatMap((g, group) => g.items.map((name) => ({ name, group })));
 const GOLDEN = Math.PI * (3 - Math.sqrt(5));
@@ -69,6 +71,7 @@ function relax(sizes: { w: number; h: number }[], width: number, height: number)
 /** Skills drift as a slow cloud; picking a group gathers its stars into a readable line. */
 export default function Constellation() {
   const [active, setActive] = useState<number | null>(null);
+  const { t, profile: localized } = useI18n();
   const sky = useRef<HTMLDivElement>(null);
   const sizes = useRef<{ w: number; h: number }[] | null>(null);
   const [points, setPoints] = useState<Point[] | null>(null);
@@ -99,18 +102,19 @@ export default function Constellation() {
     <section id="skills" className="skills container" aria-labelledby="skills-title">
       <motion.header className="section-head" {...inView} variants={stagger(0.08)}>
         <motion.h2 id="skills-title" className="kicker" variants={fadeUp}>
-          Skills
+          {t.skills}
         </motion.h2>
         <motion.p className="section-title" variants={fadeUp}>
-          A constellation, <em>gathered on demand.</em>
+          {t.skillsTitle[0]}
+          <em>{t.skillsTitle[1]}</em>
         </motion.p>
       </motion.header>
 
       <LayoutGroup>
         <div className="skills-layout">
           <ul className="skill-groups" role="list" onMouseLeave={() => setActive(null)}>
-            {profile.skills.map((g, i) => (
-              <li key={g.name}>
+            {localized.skills.map((g, i) => (
+              <li key={i}>
                 <button
                   type="button"
                   className="skill-group"
@@ -130,7 +134,7 @@ export default function Constellation() {
           </ul>
 
           <div ref={sky} className={active === null ? 'sky' : 'sky is-focused'} aria-live="polite">
-            <ul className="sky-cloud" aria-label="All skills">
+            <ul className="sky-cloud" aria-label={t.allSkills}>
               {stars.map((s, i) =>
                 s.group === active ? null : (
                   <motion.li
@@ -157,7 +161,7 @@ export default function Constellation() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
                 >
-                  {profile.skills[active].name}
+                  {localized.skills[active].name}
                 </motion.p>
                 <ul className="sky-focus-list">
                   {stars

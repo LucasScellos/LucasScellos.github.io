@@ -295,6 +295,10 @@ button {
   color: var(--text);
   border-color: var(--border-strong);
 }
+.lang-btn {
+  font: 600 0.75rem/1 var(--font-sans);
+  letter-spacing: 0.04em;
+}
 
 /* ---------- Chapter meta (cards & dialog) ---------- */
 .card-kind {
@@ -1736,6 +1740,10 @@ button {
 @media (max-width: 420px) {
   .brand {
     font-size: 1.3rem;
+  }
+  /* The hero button and the floating launcher already open the chat. */
+  .topbar-actions .btn-sm {
+    display: none;
   }
   .hero-actions .btn {
     flex: 1 1 auto;
