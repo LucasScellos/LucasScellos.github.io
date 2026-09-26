@@ -3,7 +3,8 @@ main = "src/index.ts"
 compatibility_date = "2026-09-01"
 
 [vars]
-MODEL = "qwen/qwen3.8-27b:free,dots-studio/dots-3-note-preview:free,qwen/qwen3.7-flash"
+# Free models only (":free" suffix); the worker drops anything else.
+MODEL = "qwen/qwen3.8-27b:free,dots-studio/dots-3-note-preview:free,google/gemma-4-31b-it:free"
 ALLOWED_ORIGINS = "https://lucasscellos.github.io,http://localhost:5173,http://localhost:4173"
 
 # 10 messages per minute per IP, counted in a Durable Object (see RateLimiter).

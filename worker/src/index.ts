@@ -168,6 +168,9 @@ export default {
     }
     if (!messages) return json({ error: 'Invalid request' }, 400, cors);
 
+    // Never spend credit: only ":free" models are ever sent upstream.
+    const FREE_MODELS = env.MODEL.split(',').map((m) => m.trim()).filter((m) => m.endsWith(':free'));
+
     const callOpenRouter = () =>
       fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
@@ -179,7 +182,7 @@ export default {
         },
         body: JSON.stringify({
           // First model is preferred; OpenRouter falls back down the list on errors / rate limits.
-          models: modelOverride ? [modelOverride] : env.MODEL.split(',').map((m) => m.trim()),
+          models: modelOverride ? [modelOverride] : FREE_MODELS,
           stream: true,
           max_tokens: 600,
           temperature: 0.4,
