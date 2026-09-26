@@ -6,14 +6,14 @@ compatibility_date = "2026-09-01"
 MODEL = "qwen/qwen3.8-27b:free,dots-studio/dots-3-note-preview:free,qwen/qwen3.7-flash"
 ALLOWED_ORIGINS = "https://lucasscellos.github.io,http://localhost:5173,http://localhost:4173"
 
-# 10 messages per minute per IP.
-[[ratelimits]]
-name = "RATE_LIMITER"
-namespace_id = "1001"
+# 10 messages per minute per IP, counted in a Durable Object (see RateLimiter).
+[[durable_objects.bindings]]
+name = "RATE_LIMITS"
+class_name = "RateLimiter"
 
-  [ratelimits.simple]
-  limit = 10
-  period = 60
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["RateLimiter"]
 
 # The OpenRouter key is a secret, never committed:
 #   npx wrangler secret put OPENROUTER_API_KEY
