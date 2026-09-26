@@ -1,10 +1,12 @@
 import TopBar from './components/TopBar';
-import Intro from './components/Intro';
-import Chapters from './components/Chapters';
-import Skills from './components/Skills';
+import Hero from './components/Hero';
+import About from './components/About';
+import Tunnel from './components/Tunnel';
+import Constellation from './components/Constellation';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
 import ChatWidget from './components/ChatWidget';
+import Cursor from './components/Cursor';
 
 export default function App() {
   return (
@@ -14,13 +16,15 @@ export default function App() {
       </a>
       <TopBar />
       <main id="main">
-        <Intro />
-        <Chapters />
-        <Skills />
+        <Hero />
+        <About />
+        <Tunnel />
+        <Constellation />
         <Projects />
       </main>
       <Contact />
       <ChatWidget />
+      <Cursor />
     </>
   );
 }
