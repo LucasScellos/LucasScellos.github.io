@@ -14,8 +14,14 @@
         var t = null;
         try { t = localStorage.getItem('theme-v2'); } catch (e) {}
         document.documentElement.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light');
+        document.documentElement.classList.add('js');
       })();
     </script>
+    <!-- #root ships a plain-HTML copy of the content for crawlers and agents; React replaces it on mount. -->
+    <style>
+      .js .prerender { display: none; }
+      .prerender { max-width: 760px; margin: 0 auto; padding: 2rem 16px; font-family: system-ui, sans-serif; line-height: 1.5; }
+    </style>
     <link rel="canonical" href="https://lucasscellos.github.io/" />
     <link rel="icon" href="/images/ico.ico" sizes="any" />
 
@@ -41,26 +47,9 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
     />
 
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Lucas Scellos",
-        "jobTitle": "Lead AI Engineer",
-        "worksFor": { "@type": "Organization", "name": "Theodo" },
-        "url": "https://lucasscellos.github.io/",
-        "sameAs": ["https://www.linkedin.com/in/lucas-scellos", "https://github.com/LucasScellos"]
-      }
-    </script>
   </head>
   <body>
     <div id="root"></div>
-    <noscript>
-      <p style="padding:2rem;font-family:sans-serif">
-        Lucas Scellos — Lead AI Engineer @ Theodo. This site needs JavaScript;
-        you can also <a href="/files/RESUME_SCELLOS.pdf">download the CV (PDF)</a>.
-      </p>
-    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

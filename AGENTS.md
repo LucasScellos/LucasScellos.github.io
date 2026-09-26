@@ -4,6 +4,7 @@ Lucas Scellos's portfolio: a Vite + React + TypeScript single page animated with
 
 - `npm run build` runs the type check and must pass before committing. There are no tests: check UI changes visually in light, dark and at 390px width.
 - All site content lives in `src/data/profile.ts`. The worker builds its prompt from it, so content changes also need `cd worker && npx wrangler deploy`.
+- `scripts/agentContent.ts` (a Vite plugin) also builds from it: the plain-HTML copy inside `#root`, the JSON-LD, and `llms.txt`, `llms-full.txt`, `cv.md`, `robots.txt`, `sitemap.xml`. Don't hand-write these.
 - Pushing to `master` deploys the site to GitHub Pages.
 - Before touching styles or animations, read `docs/DESIGN.md`. For the chatbot backend, read `worker/AGENTS.md`.
 
