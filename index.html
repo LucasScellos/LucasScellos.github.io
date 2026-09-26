@@ -1,14 +1,13 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lucas Scellos — Lead AI Engineer</title>
     <meta name="description" content="Lucas Scellos, Lead AI Engineer at Theodo. I build the harnesses that make AI agents deliver reliably, and the infrastructure that serves LLMs at scale." />
     <meta name="author" content="Lucas Scellos" />
-    <meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#f7f6f3" media="(prefers-color-scheme: light)" />
-    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#0b0a09" />
+    <meta name="color-scheme" content="dark" />
     <link rel="canonical" href="https://lucasscellos.github.io/" />
     <link rel="icon" href="/images/ico.ico" sizes="any" />
 
@@ -33,18 +32,6 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
     />
-
-    <script>
-      // Set theme before first paint to avoid a flash.
-      (function () {
-        var t = null;
-        try { t = localStorage.getItem('theme'); } catch (e) {}
-        if (t !== 'light' && t !== 'dark') {
-          t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        }
-        document.documentElement.setAttribute('data-theme', t);
-      })();
-    </script>
 
     <script type="application/ld+json">
       {

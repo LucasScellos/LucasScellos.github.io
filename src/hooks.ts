@@ -1,44 +1,25 @@
 import { useEffect, useState } from 'react';
+import { useReducedMotion } from 'framer-motion';
 
-export type Theme = 'dark' | 'light';
-
-export function useTheme(): [Theme, () => void] {
-  const [theme, setTheme] = useState<Theme>(() =>
-    document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light',
-  );
-
+function useMedia(query: string) {
+  const [matches, setMatches] = useState(() => window.matchMedia(query).matches);
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
-
-  // Follow OS changes until the user picks a theme explicitly.
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    const onChange = (e: MediaQueryListEvent) => {
-      let stored: string | null = null;
-      try {
-        stored = localStorage.getItem('theme');
-      } catch {
-        /* storage unavailable */
-      }
-      if (!stored) setTheme(e.matches ? 'dark' : 'light');
-    };
+    const mq = window.matchMedia(query);
+    const onChange = () => setMatches(mq.matches);
+    onChange();
     mq.addEventListener('change', onChange);
     return () => mq.removeEventListener('change', onChange);
-  }, []);
+  }, [query]);
+  return matches;
+}
 
-  const toggle = () =>
-    setTheme((t) => {
-      const next = t === 'dark' ? 'light' : 'dark';
-      try {
-        localStorage.setItem('theme', next);
-      } catch {
-        /* storage unavailable */
-      }
-      return next;
-    });
+/** True on a mouse / trackpad (hover-capable, precise pointer). */
+export const useFinePointer = () => useMedia('(hover: hover) and (pointer: fine)');
 
-  return [theme, toggle];
+/** True when pointer-driven and scroll-driven 3D effects should run. */
+export function useRichMotion() {
+  const reduced = useReducedMotion();
+  return !reduced;
 }
 
 /** Locks page scroll (e.g. while a modal is open), compensating for the scrollbar. */
