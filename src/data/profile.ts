@@ -249,9 +249,9 @@ export const profile: Profile = {
     },
     {
       name: 'Pollen Forecast',
-      description: 'Pollen forecast web app, deployed on Streamlit.',
-      tags: ['Forecasting', 'Streamlit'],
-      link: { label: 'Open the app', href: 'https://pollen-forecast.streamlit.app/' },
+      description: 'Pollen allergy forecast web app, deployed on GitHub Pages.',
+      tags: ['Forecasting', 'GitHub Pages'],
+      link: { label: 'Open the app', href: 'https://lucasscellos.github.io/pollen_allergy_forecast/?lat=48.8534&lon=2.3488&name=Paris&detail=%C3%8Ele-de-France%2C+France' },
     },
     {
       name: 'Smart IoT weather station',
