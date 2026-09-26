@@ -39,7 +39,7 @@ export function useTheme(): [Theme, () => void] {
     setTheme((t) => {
       const next = t === 'dark' ? 'light' : 'dark';
       try {
-        localStorage.setItem('theme', next);
+        localStorage.setItem('theme-v2', next);
       } catch {
         /* storage unavailable */
       }

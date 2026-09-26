@@ -96,13 +96,14 @@ export const profile: Profile = {
   experience: [
     {
       id: 'carrefour',
-      role: 'Lead AI Engineer',
+      role: 'Lead Engineer — Agentic SDLC',
       company: 'Carrefour',
       via: 'Theodo',
       period: 'Sep 2026 – Present',
       location: 'Paris',
       current: true,
-      summary: 'Lead AI Engineer at Theodo.',
+      summary:
+        "Transforming Carrefour's software development lifecycle into an agentic SDLC: designing the right SDLC for the teams and putting the right harness in the right place.",
     },
     {
       id: 'bnp-paribas',

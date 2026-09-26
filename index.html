@@ -9,10 +9,10 @@
     <meta name="theme-color" content="#f7f8fa" />
     <meta name="color-scheme" content="light dark" />
     <script>
-      // Light by default; restore the visitor's choice before first paint.
+      // Light by default; restore the visitor's choice before first paint (new key: ignores the old site's saved theme).
       (function () {
         var t = null;
-        try { t = localStorage.getItem('theme'); } catch (e) {}
+        try { t = localStorage.getItem('theme-v2'); } catch (e) {}
         document.documentElement.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light');
       })();
     </script>
