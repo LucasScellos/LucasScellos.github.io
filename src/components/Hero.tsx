@@ -6,10 +6,11 @@ import {
   useScroll,
   useSpring,
   useTransform,
+  transform,
   type MotionValue,
 } from 'framer-motion';
 import { profile } from '../data/profile';
-import { useFinePointer, useRichMotion } from '../hooks';
+import { useCssVars, useFinePointer, useRichMotion } from '../hooks';
 import { ease, fadeUp, stagger } from '../motion';
 import { chatEnabled, openChat } from './ChatWidget';
 import { ChatIcon, DownloadIcon, GitHubIcon, LinkedInIcon } from './Icons';
@@ -23,10 +24,11 @@ interface LetterProps {
   px: MotionValue<number>;
   py: MotionValue<number>;
   index: number;
+  colors: string[];
 }
 
-/** One glyph of the name: lifts, swells and warms up as the pointer comes close. */
-function Letter({ char, px, py, index }: LetterProps) {
+/** One glyph of the name: lifts, swells and takes the accent colour as the pointer comes close. */
+function Letter({ char, px, py, index, colors }: LetterProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const raw = useTransform<number, number>([px, py], ([x, y]) => {
     const el = ref.current;
@@ -39,7 +41,12 @@ function Letter({ char, px, py, index }: LetterProps) {
   const p = useSpring(raw, { stiffness: 220, damping: 22, mass: 0.5 });
   const y = useTransform(p, [0, 1], ['0em', '-0.14em']);
   const scale = useTransform(p, [0, 1], [1, 1.16]);
-  const color = useTransform(p, [0, 1], ['#f2eee7', '#e8a27a']);
+  const color = useMotionValue(colors[0]);
+  useEffect(() => {
+    const paint = (v: number) => color.set(transform(v, [0, 1], colors));
+    paint(p.get());
+    return p.on('change', paint);
+  }, [p, color, colors]);
 
   return (
     <motion.span
@@ -61,6 +68,7 @@ export default function Hero() {
   const ref = useRef<HTMLElement>(null);
   const [role, focus] = profile.headline.split(' — ');
   const words = profile.name.split(' ');
+  const colors = useCssVars(['--text', '--accent']);
 
   // Pointer, in viewport coordinates.
   const px = useMotionValue(OFF);
@@ -127,7 +135,7 @@ export default function Hero() {
           {words.map((w) => (
             <span key={w} className="hero-word" aria-hidden="true">
               {[...w].map((ch) => (
-                <Letter key={index} char={ch} px={px} py={py} index={index++} />
+                <Letter key={index} char={ch} px={px} py={py} index={index++} colors={colors} />
               ))}
             </span>
           ))}

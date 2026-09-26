@@ -22,6 +22,49 @@ export function useRichMotion() {
   return !reduced;
 }
 
+export type Theme = 'dark' | 'light';
+
+const readTheme = (): Theme =>
+  document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+
+/** Light by default; the visitor's choice is remembered. */
+export function useTheme(): [Theme, () => void] {
+  const [theme, setTheme] = useState<Theme>(readTheme);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  const toggle = () =>
+    setTheme((t) => {
+      const next = t === 'dark' ? 'light' : 'dark';
+      try {
+        localStorage.setItem('theme', next);
+      } catch {
+        /* storage unavailable */
+      }
+      return next;
+    });
+
+  return [theme, toggle];
+}
+
+/** Current value of CSS custom properties, refreshed when the theme changes. */
+export function useCssVars(names: string[]): string[] {
+  const read = () => {
+    const cs = getComputedStyle(document.documentElement);
+    return names.map((n) => cs.getPropertyValue(n).trim());
+  };
+  const [values, setValues] = useState(read);
+  useEffect(() => {
+    const mo = new MutationObserver(() => setValues(read()));
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => mo.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return values;
+}
+
 /** Locks page scroll (e.g. while a modal is open), compensating for the scrollbar. */
 export function useScrollLock(active: boolean) {
   useEffect(() => {

@@ -19,7 +19,7 @@ function TiltCard({ project }: { project: Project }) {
   const rotateX = useTransform(sy, [0, 1], [9, -9]);
   const gx = useTransform(sx, (v) => `${v * 100}%`);
   const gy = useTransform(sy, (v) => `${v * 100}%`);
-  const sheen = useMotionTemplate`radial-gradient(420px circle at ${gx} ${gy}, rgba(255, 240, 225, 0.16), transparent 55%)`;
+  const sheen = useMotionTemplate`radial-gradient(420px circle at ${gx} ${gy}, var(--sheen), transparent 55%)`;
   const hover = useMotionValue(0);
   const sheenOpacity = useSpring(hover, { stiffness: 200, damping: 30 });
 
