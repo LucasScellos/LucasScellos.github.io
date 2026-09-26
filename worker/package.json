@@ -1,0 +1,16 @@
+{
+  "name": "lucas-talk-with-me",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  },
+  "allowScripts": {
+    "workerd@1.20260925.1": true,
+    "esbuild@0.28.1": true
+  }
+}

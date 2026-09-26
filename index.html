@@ -1,194 +1,71 @@
-<!DOCTYPE HTML>
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lucas Scellos — Lead AI Engineer, Harness &amp; Inference Engineering</title>
+    <meta name="description" content="Lucas Scellos, Lead AI Engineer at Theodo. I build the harnesses that make AI agents deliver reliably, and the infrastructure that serves LLMs at scale." />
+    <meta name="author" content="Lucas Scellos" />
+    <meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f7f6f3" media="(prefers-color-scheme: light)" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="canonical" href="https://lucasscellos.github.io/" />
+    <link rel="icon" href="/images/ico.ico" sizes="any" />
 
-<html>
-	<head>
-		<title>Lucas Scellos Portfolio</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<link rel="icon" type="image/icon" href="images/ico.ico">
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-		<script>
-			function openHuggingFaceDemo() {
-				window.open("https://lucas-scellos-talk-with-me.hf.space", "HuggingFaceDemo", "width=600,height=700,scrollbars=no");
-			}
-			</script>
-			
-	</head>
-	<body class="is-preload">
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content="Lucas Scellos" />
+    <meta property="og:title" content="Lucas Scellos — Lead AI Engineer, Harness &amp; Inference Engineering" />
+    <meta property="og:description" content="I build the harnesses that make AI agents deliver reliably, and the infrastructure that serves LLMs at scale." />
+    <meta property="og:url" content="https://lucasscellos.github.io/" />
+    <meta property="og:image" content="https://lucasscellos.github.io/images/perso.jpeg" />
+    <meta property="og:image:alt" content="Portrait of Lucas Scellos" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="profile:first_name" content="Lucas" />
+    <meta property="profile:last_name" content="Scellos" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Lucas Scellos — Lead AI Engineer, Harness &amp; Inference Engineering" />
+    <meta name="twitter:description" content="I build the harnesses that make AI agents deliver reliably, and the infrastructure that serves LLMs at scale." />
+    <meta name="twitter:image" content="https://lucasscellos.github.io/images/perso.jpeg" />
 
-		<!-- Page Wrapper -->
-		<div id="page-wrapper">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
+    />
 
-			<!-- Wrapper -->
-			<div id="wrapper">
+    <script>
+      // Set theme before first paint to avoid a flash.
+      (function () {
+        var t = null;
+        try { t = localStorage.getItem('theme'); } catch (e) {}
+        if (t !== 'light' && t !== 'dark') {
+          t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', t);
+      })();
+    </script>
 
-				<!-- Panel (Banner) -->
-				<section class="panel banner right">
-					<div class="content color0 span-4-60" id="first">
-						<h1 class="major">Hello, I'm Lucas Scellos</h1>
-						<p>
-							Mid-Level Data Scientist specializing in Geospatial & Climate Change projects.<br/>
-							Currently at Axionable – helping clients achieve Trustworthy AI Certification under the EU AI Act.<br/>
-							Double degree from INSA and ETS Montreal.
-						</p>
-						<ul class="actions">
-							<li><a href="#contact" class="button primary color2 icon">Contact Me</a></li>
-						</ul>
-					</div>
-					<div class="image filtered span-2-75" data-position="15% 15%">
-						<img src="images/perso_chemise.png" alt="Lucas Scellos" />
-					</div>
-				</section>
-
-				<!-- Panel (Spotlight) - About Me -->
-				<section class="panel spotlight medium left">
-					<div class="content span-7">
-						<h2 class="major">Who I Am</h2>
-						<p>
-							I am a Data Scientist with a passion for leveraging geospatial and climate data to drive impactful solutions.
-							With expertise in climate modeling, data pipelines, and trustworthy AI methodologies, I help organizations
-							transform complex challenges into actionable insights.
-						</p>
-					</div>
-					<div class="image filtered tinted" data-position="top left">
-						<img src="images/nasa.jpg" alt="Climate and Data" />
-					</div>
-				</section>
-
-				<!-- Panel - Skills -->
-				<section class="panel spotlight color1">
-					<div class="content span-3">
-						<h2 class="major">What I Do</h2>
-						<p>
-							My skills include:
-						</p>
-						<ul>
-							<li><strong>Programming & Tools:</strong> Python, Git, Bash, Java, C</li>
-							<li><strong>Libraries:</strong> Xarray, (Geo)Pandas, Scikit-Learn, Folium, Shap</li>
-							<li><strong>Machine Learning:</strong> Supervised, Unsupervised, and Reinforcement Learning</li>
-							<li><strong>Tech Tools:</strong> Cloud (AWS, GCP), Docker, Web Scraping, and Cybersecurity</li>
-							<li><strong>Regulatory Expertise:</strong> Trustworthy AI methodologies and compliance with AI regulations</li>
-						</ul>
-					</div>
-					<!-- <div class="inner right">
-						<ul class="grid-icons two connected">
-							<li><span class="icon solid fa-cog"><span class="label">Data</span></span></li>
-							<li><span class="icon solid fa-globe"><span class="label">Geospatial</span></span></li>
-							<li><span class="icon solid fa-cloud"><span class="label">Cloud</span></span></li>
-							<li><span class="icon solid fa-check"><span class="label">Compliance</span></span></li>
-						</ul>
-					</div> -->
-				</section>
-
-				<!-- Panel - Current Experience -->
-				<section class="panel spotlight large left">
-					<div class="content span-9">
-						<h2 class="major">Current Experience</h2>
-						<p>
-							<strong>Mid-Level Data Scientist @ Axionable</strong> (7+ Consulting Missions)
-						</p>
-						<ul>
-							<li>
-								<strong>Exposure Measurement (2023-2024):</strong> Scientific research and algorithm development for predicting natural catastrophe attribution and quantifying climate change damage using climate data (Netcdf, Xarray, GeoPandas) and distributed computing (Spark on GCP).
-							</li>
-							<li>
-								<strong>Climate Risk Calculation (2024):</strong> Developing vulnerability scores for financial assets by modeling various climate scenarios (using Netcdf/GRIB data from Copernicus and Drias).
-							</li>
-							<li>
-								<strong>Trustworthy AI Methodology (2024):</strong> Consulting on AI project documentation and methodologies to support LNE certification in accordance with the EU AI Act.
-							</li>
-						</ul>
-					</div>
-					<div class="image filtered tinted" data-position="top right">
-						<img src="images/consulting.jpg" alt="Experience" />
-					</div>
-				</section>
-
-				<!-- Panel - Other Experience -->
-				<section class="panel spotlight medium left">
-					<div class="content span-9">
-						<h2 class="major">Other Experience</h2>
-						<p>
-							<strong>Junior Data Scientist @ Axionable (2023):</strong> Technical consultancy for Trustworthy AI certification and climate projects.<br/><br/>
-							<strong>Data Engineer Intern @ Thales (2022):</strong> Designed a search engine database using OpenSearch/ELK and object storage with minIO;
-							automated web scraping (Scrapy, Selenium) under strict cybersecurity constraints.<br/><br/>
-							<strong>Data Engineer Intern @ Akeneo (2021):</strong> Designed of machine learning pipeline; Data Analysis on the use of the application by customers; Work with Google Cloud Platform, SQL database
-						</p>
-					</div>
-				</section>
-
-				<!-- Panel - Education & Projects -->
-				<section class="panel spotlight medium right">
-					<div class="content span-9">
-						<h2 class="major">Education & Projects</h2>
-						<p>
-							<strong>Education:</strong><br/>
-							M.Sc. in Information Technology, ETS Montreal (2021–2022)<br/>
-							Engineer Diploma in Information Technology, INSA Rouen (2017–2022)<br/><br/>
-							<strong>Projects:</strong><br/>
-							Smart IoT Weather Station on AWS (2023), Bike Sharing Visualization and Prediction (2022), Personal Chatbot with BERT (2021), and various initiatives promoting science and technology.
-						</p>
-					</div>
-					<div class="image filtered tinted" data-position="top left">
-						<img src="images/montreal.jpg" alt="Education & Projects" />
-					</div>
-				</section>
-
-				<section class="panel spotlight small left">
-					<div class="content span-9">
-						<h2 class="major">My Side Project</h2>
-						<ul class="actions">
-							<li><button onclick="openHuggingFaceDemo()" class="button icon fa-gem">
-								Open Lucas Chatbot 
-							</button></li>
-							<li><a href="https://pollen-forecast.streamlit.app/" class="button icon fa-chart-bar">Pollen Forecast</a></li>
-						</ul>
-
-					</div>
-					<div class="image filtered tinted" data-position="top left">
-						<img src="images/rocket.jpg" alt="rocket" />
-					</div>
-				</section>
-                
-
-				<!-- Panel - Contact -->
-				<section class="panel color3-alt" id="contact">
-					<div class="intro color3">
-						<h2 class="major">Let's Connect</h2>
-						<p>
-							Reach out to discuss data science, AI projects, or collaborations.<br/>
-							<strong>Phone:</strong> (+33) 6.68.55.06.53<br/>
-							<strong>Email:</strong> <a href="mailto:luscellos+pro@gmail.com">luscellos+pro@gmail.com</a>
-						</p>
-						<p>
-							<a href="https://www.linkedin.com/in/lucas-scellos" target="_blank">LinkedIn</a> | 
-							<a href="https://github.com/LucasScellos" target="_blank">GitHub</a> | 
-							<a href="https://lucasscellos.github.io" target="_blank">Website</a>
-						</p>
-						<a href="#first" class="button primary color2 circle icon solid fa-angle-left">Back</a>
-                        <p>
-
-                        </p>
-                        <ul class="actions">
-                            <li><a href="files/RESUME_SCELLOS.pdf" class="button primary color2 icon">Download My CV! </a></li>
-                        </ul>
-					</div>
-				</section>
-
-				<!-- Footer -->
-				<div class="copyright">
-					&copy; Lucas Scellos. All images are from <a href="https://www.unsplash.com">Unsplash</a>, Design: <a href="https://html5up.net">HTML5 UP</a>.
-				</div>
-
-			</div>
-		</div>
-
-		<!-- Scripts -->
-		<script src="assets/js/jquery.min.js"></script>
-		<script src="assets/js/browser.min.js"></script>
-		<script src="assets/js/breakpoints.min.js"></script>
-		<script src="assets/js/main.js"></script>
-
-	</body>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Lucas Scellos",
+        "jobTitle": "Lead AI Engineer",
+        "worksFor": { "@type": "Organization", "name": "Theodo" },
+        "url": "https://lucasscellos.github.io/",
+        "sameAs": ["https://www.linkedin.com/in/lucas-scellos", "https://github.com/LucasScellos"]
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <p style="padding:2rem;font-family:sans-serif">
+        Lucas Scellos — Lead AI Engineer @ Theodo. This site needs JavaScript;
+        you can also <a href="/files/RESUME_SCELLOS.pdf">download the CV (PDF)</a>.
+      </p>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

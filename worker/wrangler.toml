@@ -1,0 +1,20 @@
+name = "lucas-talk-with-me"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+
+[vars]
+MODEL = "qwen/qwen3.8-27b:free,dots-studio/dots-3-note-preview:free,qwen/qwen3.7-flash"
+ALLOWED_ORIGINS = "https://lucasscellos.github.io,http://localhost:5173,http://localhost:4173"
+
+# 10 messages per minute per IP.
+[[ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1001"
+
+  [ratelimits.simple]
+  limit = 10
+  period = 60
+
+# The OpenRouter key is a secret, never committed:
+#   npx wrangler secret put OPENROUTER_API_KEY
+# For local dev, put OPENROUTER_API_KEY=... in worker/.dev.vars (gitignored).
