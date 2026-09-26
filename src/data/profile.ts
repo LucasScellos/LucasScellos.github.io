@@ -78,14 +78,13 @@ export interface Profile {
 
 export const profile: Profile = {
   name: 'Lucas Scellos',
-  headline: 'Lead AI Engineer @ Theodo — Harness & Inference Engineering',
+  headline: 'Lead AI Engineer @ Theodo',
   tagline:
     'I build the harnesses that make AI agents deliver reliably, and the infrastructure that serves LLMs at scale.',
   location: 'Paris, France',
   about: [
     "I'm a Lead AI Engineer at Theodo. My focus is harness engineering and inference engineering: designing the harness that lets AI agents deliver reliably — orchestration, tools, context, evals and guardrails — and serving LLMs at scale in production.",
     'Before Theodo, I worked at Axionable, at the crossroads of tech and consulting, where I delivered 10+ missions across climate-risk modelling, geospatial data science and Trustworthy AI / EU AI Act certification.',
-    'I hold a double degree from INSA Rouen and ÉTS Montréal.',
   ],
   portrait: 'images/portrait.png',
   cv: 'files/RESUME_SCELLOS.pdf',
@@ -97,20 +96,13 @@ export const profile: Profile = {
   experience: [
     {
       id: 'carrefour',
-      role: 'Technical Lead — Agentic SDLC',
+      role: 'Lead AI Engineer',
       company: 'Carrefour',
       via: 'Theodo',
       period: 'Sep 2026 – Present',
       location: 'Paris',
       current: true,
-      summary:
-        "Technical lead of the mission — I own the technical direction and architecture of Carrefour's agentic software development lifecycle (the engineering, not the project management).",
-      highlights: [
-        'Defining the architecture and technical choices of the agentic SDLC.',
-        'Engineering the harness — orchestration, tooling, context, evaluation and guardrails — so AI coding agents deliver reliably.',
-        "Bringing AI coding agents into the teams' delivery workflow.",
-      ],
-      tags: ['Agentic SDLC', 'AI coding agents', 'Workflow harness', 'Tech leadership'],
+      summary: 'Lead AI Engineer at Theodo.',
     },
     {
       id: 'bnp-paribas',
