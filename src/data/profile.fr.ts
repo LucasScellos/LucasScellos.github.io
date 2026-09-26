@@ -10,26 +10,36 @@ const experience: Record<string, ExperienceText> = {
     role: 'Lead Engineer — SDLC agentique',
     period: 'sept. 2026 – aujourd’hui',
     summary:
-      'Je transforme le cycle de développement logiciel de Carrefour en SDLC agentique : concevoir le bon SDLC pour les équipes et placer le bon harness au bon endroit.',
+      'Tech lead du programme d’AI enablement qui fait entrer les agents IA dans les équipes de développement de Carrefour, au sein d’une équipe d’une dizaine de personnes.',
+    highlights: [
+      'Évaluation de la maturité IA des équipes existantes.',
+      'Cadre de sécurité et de gouvernance pour les agents de code.',
+      'Manuel opérationnel des équipes, indicateurs et parcours de formation, puis choix des premières équipes pilotes.',
+    ],
   },
   'bnp-paribas': {
-    role: 'Inference Engineer',
+    role: 'AI / Inference Engineer',
     period: 'sept. 2025 – sept. 2026',
     summary:
-      'J’ai travaillé sur l’une des plus grandes plateformes de serving de LLM en Europe, qui sert des LLM à des milliers d’utilisateurs.',
+      'AI engineer dans l’équipe ops de l’une des plus grandes plateformes de serving de LLM en Europe, utilisée par des centaines de milliers de personnes.',
     highlights: [
-      'Serving de modèles avec vLLM et optimisation des performances.',
-      'Benchmarks de sécurité et de performance des modèles.',
-      'Investigation d’incidents en production.',
-      'Déploiements GitOps avec ArgoCD sur Kubernetes.',
+      'Contribué à doubler la capacité d’utilisateurs de la plateforme depuis mon arrivée, tout en relevant plusieurs limites de serving.',
+      'Serving des modèles Mistral, en lien direct avec leur équipe, et de modèles open-weight : Qwen, Kimi, GLM, Muse Glimmer et Gemma.',
+      'Optimisation de vLLM, benchmarks de sécurité et de performance des nouveaux modèles.',
+      'Investigation d’incidents en production et déploiements GitOps avec ArgoCD sur Kubernetes.',
     ],
   },
   'axionable-mid': {
     role: 'Ingénieur IA/ML confirmé',
     period: '2023 – 2025',
     summary:
-      'Plus de 10 missions de conseil, entre tech et conseil : risque climatique, data science géospatiale et IA de confiance.',
+      'C’est là que j’ai fait mes classes, entre tech et conseil : plus de 10 missions, pour de grands groupes comme pour de petites structures, en risque climatique, data science géospatiale et IA de confiance.',
     missions: [
+      {
+        title: 'ChemAdapt : plateforme d’adaptation climatique pour France Chimie',
+        details:
+          'Lead tech. Évalue l’exposition de chaque site chimique français à la sécheresse et aux inondations selon sa localisation, avec les données Météo-France et du World Resources Institute, et propose des mesures parmi 650 actions d’adaptation. Conçue pour les 4 000 sites du secteur, testée sur une cinquantaine de sites pilotes, et lauréate des European Responsible Care Awards 2025.',
+      },
       {
         title: 'Mesure de l’exposition aux aléas sécheresse et inondation pour l’assurance',
         period: '2023 – 2024',
@@ -47,7 +57,11 @@ const experience: Record<string, ExperienceText> = {
         details: 'Mise en conformité avec l’AI Act européen ; audit de la documentation et de la méthodologie.',
       },
     ],
-    highlights: ['Référent GenAI chez Axionable.', 'Encadrement d’un stagiaire de fin d’études.'],
+    highlights: [
+      'Lead tech sur ChemAdapt, la plateforme d’adaptation climatique de France Chimie pour 4 000 sites chimiques français, lauréate des European Responsible Care Awards 2025.',
+      'Référent GenAI chez Axionable.',
+      'Encadrement d’un stagiaire de fin d’études.',
+    ],
   },
   'axionable-junior': {
     role: 'Data Scientist junior',
@@ -88,28 +102,78 @@ const education: Record<string, EducationText> = {
   },
 };
 
-const skillGroups = ['Inférence & serving LLM', 'Ingénierie agentique', 'Plateforme & Ops', 'Data & ML', 'IA de confiance'];
+const skillGroups = [
+  {
+    name: 'Inférence & serving LLM',
+    evidence:
+      'Chez BNP Paribas : optimisation du serving vLLM et benchmarks de modèles sur une plateforme utilisée par des centaines de milliers de personnes.',
+  },
+  {
+    name: 'Ingénierie agentique',
+    evidence: 'Chez Carrefour : tech lead du programme d’AI enablement qui fait entrer les agents de code dans les équipes de développement.',
+  },
+  {
+    name: 'Plateforme & Ops',
+    evidence: 'GitOps avec ArgoCD sur Kubernetes chez BNP Paribas ; Docker et Kubernetes sur cloud privé chez Thales.',
+  },
+  {
+    name: 'Data & ML',
+    evidence:
+      'Chez Axionable : pipelines de risque climatique pour l’assurance et un gestionnaire d’actifs (Xarray, GeoPandas, Spark sur GCP).',
+  },
+  {
+    name: 'IA de confiance',
+    evidence: 'Chez Axionable : mise en conformité AI Act et accompagnement à la certification LNE pour des clients.',
+  },
+];
 
-const projects: Record<string, { name?: string; description: string; linkLabel?: string }> = {
+const projects: Record<string, { name?: string; description: string; details?: string[]; linkLabel?: string }> = {
   'Talk with me': {
-    description: 'Un chatbot personnel avec qui discuter, hébergé sur un Space Hugging Face.',
-    linkLabel: 'Ouvrir le Space',
+    description: 'Le chatbot de ce site : posez-lui vos questions sur mon parcours, en français ou en anglais.',
+    details: [
+      'Il répond uniquement à partir de mon CV, généré depuis le même fichier de données que cette page : jamais obsolète.',
+      'Un Cloudflare Worker garde la clé d’API hors du navigateur et diffuse les réponses de modèles gratuits OpenRouter.',
+    ],
   },
   'Pollen Forecast': {
-    description: 'Application web de prévision des allergies au pollen, déployée sur GitHub Pages.',
+    description: 'Prévision du pollen heure par heure sur 4 jours, partout en Europe, à partir des données Copernicus CAMS.',
+    details: [
+      'Six allergènes, chacun avec ses propres seuils de risque, une vue sur 4 jours et un graphique horaire.',
+      'Réécrite d’une app Python / Streamlit en PWA Svelte statique : toute l’Europe au lieu de la France, sans serveur, hébergement à 0 €.',
+      'Installable, utilisable hors ligne, en français et en anglais.',
+    ],
     linkLabel: 'Ouvrir l’application',
+  },
+  'Home media server': {
+    name: 'Serveur multimédia maison',
+    description: 'Mon serveur multimédia sur Raspberry Pi 4 : il télécharge films et séries et les diffuse sur la télé.',
+    details: [
+      'Plex et Transmission sous Docker, installés de zéro avec quelques commandes make.',
+      'Réglé selon les limites du Pi : lecture directe uniquement, pas de transcodage, et le ventilateur démarre au-delà de 55 °C.',
+    ],
+    linkLabel: 'Voir le code',
   },
   'Smart IoT weather station': {
     name: 'Station météo IoT connectée',
-    description: 'Station météo IoT connectée, construite sur AWS.',
+    description: 'Station de température et d’humidité réalisée pour un cours d’IoT à l’ÉTS Montréal, avec des relevés envoyés sur AWS.',
   },
   'Bike sharing visualization & prediction': {
     name: 'Vélos en libre-service : visualisation et prédiction',
-    description: 'Visualisation et prédiction pour un système de vélos en libre-service.',
+    description: 'Cartes et prévisions de l’usage des vélos BIXI à Montréal, réalisées pour un cours de data mining à l’ÉTS.',
+    details: [
+      'Nettoyage des données ouvertes BIXI 2021, avec détection de stations mal géolocalisées.',
+      'Prédiction des trajets selon la météo et le calendrier, et disponibilité des stations en temps réel via le flux GBFS.',
+    ],
+    linkLabel: 'Voir le code',
   },
   'Personal chatbot': {
     name: 'Chatbot personnel',
-    description: 'Chatbot entraîné sur mes conversations WhatsApp avec BERT.',
+    description: 'Un générateur de texte qui écrit comme moi, entraîné sur mes conversations Messenger (cours de machine learning à l’INSA, en équipe de trois).',
+    details: [
+      'Conversion de l’export de données Facebook en courtes conversations d’entraînement.',
+      'Fine-tuning d’un GPT-2 français avec Hugging Face Transformers.',
+    ],
+    linkLabel: 'Voir le code',
   },
 };
 
@@ -124,7 +188,7 @@ export const profileFr: Profile = {
   ],
   experience: en.experience.map((e) => ({ ...e, ...experience[e.id] })),
   education: en.education.map((e) => ({ ...e, ...education[e.id] })),
-  skills: en.skills.map((g, i) => ({ ...g, name: skillGroups[i] ?? g.name })),
+  skills: en.skills.map((g, i) => ({ ...g, ...skillGroups[i] })),
   projects: en.projects.map((p) => {
     const fr = projects[p.name];
     if (!fr) return p;
@@ -132,6 +196,7 @@ export const profileFr: Profile = {
       ...p,
       name: fr.name ?? p.name,
       description: fr.description,
+      details: fr.details ?? p.details,
       link: p.link && { ...p.link, label: fr.linkLabel ?? p.link.label },
     };
   }),

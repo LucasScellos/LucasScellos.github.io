@@ -53,11 +53,11 @@ function renderHtml(): string {
       return `<article><h3>${esc(e.degree)} — ${esc(e.school)}</h3><p>${esc(e.period)}</p><p>${esc(e.summary)}</p>${details}${exchange}</article>`;
     })
     .join('');
-  const skills = p.skills.map((g) => `<li><strong>${esc(g.name)}:</strong> ${esc(g.items.join(', '))}</li>`).join('');
+  const skills = p.skills.map((g) => `<li><strong>${esc(g.name)}:</strong> ${esc(g.items.join(', '))}. ${esc(g.evidence)}</li>`).join('');
   const projects = p.projects
     .map((pr) => {
       const title = pr.link ? `<a href="${esc(pr.link.href)}">${esc(pr.name)}</a>` : esc(pr.name);
-      return `<li><strong>${title}</strong>${pr.year ? ` (${esc(pr.year)})` : ''}: ${esc(pr.description)}</li>`;
+      return `<li><strong>${title}</strong>${pr.year ? ` (${esc(pr.year)})` : ''}: ${esc([pr.description, ...(pr.details ?? [])].join(' '))}</li>`;
     })
     .join('');
 
@@ -173,14 +173,14 @@ ${education}
 
 ## Skills
 
-${p.skills.map((g) => `- **${g.name}:** ${g.items.join(', ')}`).join('\n')}
+${p.skills.map((g) => `- **${g.name}:** ${g.items.join(', ')}. ${g.evidence}`).join('\n')}
 
 ${renderBriefMd()}
 
 ## Projects
 
 ${p.projects
-  .map((pr) => `- ${pr.link ? `[${pr.name}](${pr.link.href})` : `**${pr.name}**`}${pr.year ? ` (${pr.year})` : ''}: ${pr.description}`)
+  .map((pr) => `- ${pr.link ? `[${pr.name}](${pr.link.href})` : `**${pr.name}**`}${pr.year ? ` (${pr.year})` : ''}: ${[pr.description, ...(pr.details ?? [])].join(' ')}`)
   .join('\n')}
 
 ## Contact

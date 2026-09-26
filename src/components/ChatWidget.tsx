@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import { Fragment, useCallback, useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { profile } from '../data/profile';
 import { STRINGS, useI18n, type Strings } from '../i18n';
@@ -122,6 +122,12 @@ export default function ChatWidget() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
+  // The hero has its own "Talk with me" button, so the floating launcher only shows once past it.
+  const { scrollY } = useScroll();
+  const heroEnd = () => document.getElementById('top')?.offsetHeight ?? window.innerHeight;
+  const [pastHero, setPastHero] = useState(() => window.scrollY > heroEnd() * 0.7);
+  useMotionValueEvent(scrollY, 'change', (y) => setPastHero(y > heroEnd() * 0.7));
+
   useEffect(() => {
     const onOpen = () => setOpen(true);
     window.addEventListener(OPEN_EVENT, onOpen);
@@ -217,12 +223,13 @@ export default function ChatWidget() {
   return (
     <>
       <AnimatePresence>
-        {!open && (
+        {!open && pastHero && (
           <motion.button
             key="launcher"
             type="button"
             className="chat-launcher"
             onClick={() => setOpen(true)}
+            aria-label={all.talkWithMe}
             initial={{ opacity: 0, y: 16, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.9 }}
@@ -232,7 +239,7 @@ export default function ChatWidget() {
             aria-haspopup="dialog"
           >
             <ChatIcon width={20} height={20} />
-            <span>{all.talkWithMe}</span>
+            <span className="chat-launcher-label">{all.talkWithMe}</span>
           </motion.button>
         )}
       </AnimatePresence>

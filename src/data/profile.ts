@@ -24,11 +24,15 @@ export interface Experience {
   missions?: SubMission[];
   tags?: string[];
   current?: boolean;
+  /** Shows the first highlights right on the chapter card, not only in the dialog. */
+  featured?: boolean;
 }
 
 export interface SkillGroup {
   name: string;
   items: string[];
+  /** Where these skills were put into practice, in one sentence. */
+  evidence: string;
 }
 
 export interface Exchange {
@@ -53,8 +57,12 @@ export interface Project {
   name: string;
   year?: string;
   description: string;
+  /** Concrete points: what it does, how it's built, what came out of it. */
+  details?: string[];
   tags: string[];
   link?: Link;
+  /** The card opens the site's own chat instead of following a link. */
+  opensChat?: boolean;
 }
 
 export interface FitArea {
@@ -116,25 +124,33 @@ export const profile: Profile = {
       period: 'Sep 2026 – Present',
       location: 'Paris',
       current: true,
+      featured: true,
       summary:
-        "Transforming Carrefour's software development lifecycle into an agentic SDLC: designing the right SDLC for the teams and putting the right harness in the right place.",
+        "Tech lead on the AI-enablement programme bringing AI agents into Carrefour's software teams, within a team of about ten.",
+      highlights: [
+        "Assessing the AI readiness of Carrefour's existing teams.",
+        'Setting the security and governance framework for coding agents.',
+        'Building the team runbook, metrics and training paths, then choosing the first pilot teams.',
+      ],
+      tags: ['AI enablement', 'Agentic SDLC', 'Coding agents', 'AI governance', 'Change management'],
     },
     {
       id: 'bnp-paribas',
-      role: 'Inference Engineer',
+      role: 'AI / Inference Engineer',
       company: 'BNP Paribas',
       via: 'Theodo',
       period: 'Sep 2025 – Sep 2026',
       location: 'Paris',
+      featured: true,
       summary:
-        'Worked on one of the largest LLM serving platforms in Europe, serving LLMs to thousands of users.',
+        "AI engineer in the ops team of one of Europe's largest LLM serving platforms, used by hundreds of thousands of people.",
       highlights: [
-        'vLLM model serving and performance tuning.',
-        'Security and performance benchmarking of models.',
-        'Production incident investigation.',
-        'GitOps deployments with ArgoCD on Kubernetes.',
+        "Helped double the platform's user capacity since I joined, while raising several serving limits.",
+        "Served Mistral's models, working directly with their team, alongside open-weight models: Qwen, Kimi, GLM, Muse Glimmer and Gemma.",
+        'vLLM tuning, plus security and performance benchmarking of new models.',
+        'Production incident investigation and GitOps deployments with ArgoCD on Kubernetes.',
       ],
-      tags: ['vLLM', 'Kubernetes', 'ArgoCD', 'GitOps', 'Benchmarking', 'LLM security', 'Observability'],
+      tags: ['vLLM', 'Mistral', 'Open-weight models', 'Kubernetes', 'ArgoCD', 'GitOps', 'Benchmarking', 'LLM security'],
     },
     {
       id: 'axionable-mid',
@@ -142,9 +158,15 @@ export const profile: Profile = {
       company: 'Axionable',
       period: '2023 – 2025',
       location: 'Paris',
+      featured: true,
       summary:
-        '10+ consulting missions at the crossroads of tech and consulting — climate risk, geospatial data science and Trustworthy AI.',
+        'Where I learned my trade, doing tech and consulting together: 10+ missions for large groups and small organisations alike, in climate risk, geospatial data science and Trustworthy AI.',
       missions: [
+        {
+          title: 'ChemAdapt: climate adaptation platform for France Chimie',
+          details:
+            "Tech lead. Rates each French chemical site's exposure to drought and flood from its location, with Météo-France and World Resources Institute data, and suggests measures among 650 adaptation actions. Built for the industry's 4,000 sites, tested on about fifty pilots, and a winner at the European Responsible Care Awards 2025.",
+        },
         {
           title: 'Exposure measurement of drought & flood hazards for insurance',
           period: '2023 – 2024',
@@ -163,6 +185,7 @@ export const profile: Profile = {
         },
       ],
       highlights: [
+        'Tech lead on ChemAdapt, France Chimie’s climate-adaptation platform for 4,000 French chemical sites, winner at the European Responsible Care Awards 2025.',
         'GenAI referent at Axionable.',
         "Mentored a master's-thesis intern.",
       ],
@@ -207,22 +230,27 @@ export const profile: Profile = {
     {
       name: 'LLM Inference & Serving',
       items: ['vLLM', 'GPU serving', 'Benchmarking', 'LLM security testing'],
+      evidence: 'At BNP Paribas: tuned vLLM serving and benchmarked models on a platform used by hundreds of thousands of people.',
     },
     {
       name: 'Agentic Engineering',
       items: ['AI coding agents', 'Workflow harnesses', 'Context engineering', 'Evals', 'Guardrails'],
+      evidence: 'At Carrefour: tech lead on the AI-enablement programme bringing coding agents into the software teams.',
     },
     {
       name: 'Platform & Ops',
       items: ['Kubernetes', 'ArgoCD', 'GitOps', 'Docker', 'AWS', 'GCP', 'Azure'],
+      evidence: 'GitOps with ArgoCD on Kubernetes at BNP Paribas; Docker and Kubernetes on a private cloud at Thales.',
     },
     {
       name: 'Data & ML',
       items: ['Python', 'Scikit-Learn', 'Pandas', 'GeoPandas', 'Xarray', 'Spark', 'SHAP'],
+      evidence: 'At Axionable: climate-risk pipelines for insurance and an asset manager (Xarray, GeoPandas, Spark on GCP).',
     },
     {
       name: 'Trustworthy AI',
       items: ['EU AI Act', 'LNE certification', 'Audit'],
+      evidence: 'At Axionable: EU AI Act alignment and LNE certification support for clients.',
     },
   ],
   education: [
@@ -250,33 +278,62 @@ export const profile: Profile = {
   projects: [
     {
       name: 'Talk with me',
-      description: 'A personal chatbot you can talk with, hosted as a Hugging Face Space.',
-      tags: ['LLM', 'Hugging Face'],
-      link: { label: 'Open the Space', href: 'https://lucas-scellos-talk-with-me.hf.space' },
+      description: 'The chatbot on this site: ask it about my career, in English or French.',
+      details: [
+        'Answers only from my resume, built from the same data file as this page, so it never goes stale.',
+        'A Cloudflare Worker keeps the API key out of the browser and streams replies from free OpenRouter models.',
+      ],
+      tags: ['LLM', 'Cloudflare Workers', 'OpenRouter'],
+      opensChat: true,
     },
     {
       name: 'Pollen Forecast',
-      description: 'Pollen allergy forecast web app, deployed on GitHub Pages.',
-      tags: ['Forecasting', 'GitHub Pages'],
+      description: '4-day, hourly pollen forecast for anywhere in Europe, built on Copernicus CAMS data.',
+      details: [
+        'Six allergens, each with its own risk thresholds, a 4-day outlook and an hourly chart.',
+        'Rewritten from a Python / Streamlit app into a static Svelte PWA: all of Europe instead of France, no server, €0 hosting.',
+        'Installable, works offline, in French and English.',
+      ],
+      tags: ['Svelte', 'TypeScript', 'Copernicus', 'PWA'],
       link: { label: 'Open the app', href: 'https://lucasscellos.github.io/pollen_allergy_forecast/?lat=48.8534&lon=2.3488&name=Paris&detail=%C3%8Ele-de-France%2C+France' },
     },
     {
+      name: 'Home media server',
+      description: 'My media server on a Raspberry Pi 4: it downloads movies and series and streams them to the TV.',
+      details: [
+        'Plex and Transmission in Docker, set up from scratch with a handful of make commands.',
+        'Tuned to the Pi’s limits: direct play only, no transcoding, and the fan kicks in above 55 °C.',
+      ],
+      tags: ['Raspberry Pi', 'Docker', 'Plex', 'Self-hosting'],
+      link: { label: 'View the code', href: 'https://github.com/LucasScellos/mediaserver' },
+    },
+    {
       name: 'Smart IoT weather station',
-      year: '2023',
-      description: 'Smart IoT weather station built on AWS.',
-      tags: ['IoT', 'AWS'],
+      year: '2022',
+      description: 'Temperature and humidity station built for an IoT course at ÉTS Montréal, with its readings sent to AWS.',
+      tags: ['IoT', 'Python', 'AWS'],
     },
     {
       name: 'Bike sharing visualization & prediction',
       year: '2022',
-      description: 'Visualization and prediction for a bike sharing system.',
-      tags: ['Data viz', 'Prediction'],
+      description: 'Maps and forecasts of BIXI bike-share usage in Montréal, built for a data-mining course at ÉTS.',
+      details: [
+        'Cleaned the 2021 BIXI open data and caught stations with wrong coordinates.',
+        'Predicted trips from weather and calendar, and read live station availability from the GBFS feed.',
+      ],
+      tags: ['Python', 'Open data', 'Prediction', 'Data viz'],
+      link: { label: 'View the code', href: 'https://github.com/LucasScellos/bixi-visualization' },
     },
     {
       name: 'Personal chatbot',
       year: '2021',
-      description: 'Chatbot fine-tuned on my WhatsApp conversations with BERT.',
-      tags: ['NLP', 'BERT'],
+      description: 'A text generator that writes like me, trained on my Messenger conversations (INSA machine-learning course, team of three).',
+      details: [
+        'Parsed the Facebook data export into short conversations for training.',
+        'Fine-tuned a French GPT-2 with Hugging Face Transformers.',
+      ],
+      tags: ['NLP', 'GPT-2', 'Transformers'],
+      link: { label: 'View the code', href: 'https://github.com/LucasScellos/transformersMessenger' },
     },
   ],
   agentBrief: {
@@ -284,12 +341,12 @@ export const profile: Profile = {
       {
         title: 'Making AI agents reliable in a real engineering organization',
         details: 'Harness design (orchestration, tools, context, evals, guardrails) and agentic SDLC.',
-        evidence: 'Leads the agentic SDLC transformation at Carrefour (via Theodo, since Sep 2026).',
+        evidence: 'Tech lead on the AI-enablement programme at Carrefour (via Theodo, since Sep 2026).',
       },
       {
         title: 'Serving LLMs in production at scale',
         details: 'vLLM tuning, security and performance benchmarking, incident investigation, GitOps on Kubernetes.',
-        evidence: "Inference engineer on one of Europe's largest LLM serving platforms at BNP Paribas, used by thousands of people.",
+        evidence: "AI engineer on one of Europe's largest LLM serving platforms at BNP Paribas, used by hundreds of thousands of people; helped double its user capacity.",
       },
       {
         title: 'Trustworthy or regulated AI',
@@ -305,6 +362,7 @@ export const profile: Profile = {
     standsOut: [
       'Works on both layers of the AI stack: the agent harness (applications) and inference serving (infrastructure). Most engineers specialize in one.',
       'Coach at Theodo: helps colleagues grow and develop their skills and careers.',
+      'Tech lead on ChemAdapt, France Chimie’s climate-adaptation platform for 4,000 chemical sites, a winner at the European Responsible Care Awards 2025.',
       "Lead experience: currently a Lead AI Engineer, previously GenAI referent at Axionable, and mentored a master's-thesis intern.",
       'Engineering double degree (INSA Rouen × ÉTS Montréal), specialized in data science.',
     ],

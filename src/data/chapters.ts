@@ -24,6 +24,7 @@ export interface Chapter {
   /** Short extra line shown on the card, e.g. an exchange semester. */
   note?: string;
   current?: boolean;
+  featured?: boolean;
   highlights?: string[];
   items?: { label: string; list: ChapterItem[] };
   tags?: string[];
@@ -40,6 +41,7 @@ export const buildChapters = (profile: Profile, t: Strings): Chapter[] => [
     location: e.location,
     summary: e.summary,
     current: e.current,
+    featured: e.featured,
     highlights: e.highlights,
     items: e.missions?.length ? { label: t.selectedMissions, list: e.missions } : undefined,
     tags: e.tags,

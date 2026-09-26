@@ -9,7 +9,7 @@ import {
   type MotionValue,
 } from 'framer-motion';
 import { chapterIds, type Chapter } from '../data/chapters';
-import { useRichMotion } from '../hooks';
+import { useRichMotion, useWideScreen } from '../hooks';
 import { useI18n } from '../i18n';
 import { fadeUp, inView, stagger } from '../motion';
 import ChapterDialog from './ChapterDialog';
@@ -66,6 +66,16 @@ function CardBody({ chapter, index }: { chapter: Chapter; index: number }) {
       <span id={`summary-${chapter.id}`} className="tcard-summary">
         {chapter.summary}
       </span>
+      {chapter.featured && chapter.highlights && (
+        // Spans, not <ul>: the card is a <button>, which only takes phrasing content.
+        <span className="tcard-points" role="list">
+          {chapter.highlights.slice(0, 3).map((h) => (
+            <span key={h} role="listitem">
+              {h}
+            </span>
+          ))}
+        </span>
+      )}
       <span className="tcard-more" aria-hidden="true">
         {t.openChapter} <ArrowUpRight width={16} height={16} />
       </span>
@@ -128,6 +138,7 @@ function Frame({ k, camera }: { k: number; camera: MotionValue<number> }) {
 
 export default function Tunnel() {
   const rich = useRichMotion();
+  const wide = useWideScreen();
   const { t, chapters } = useI18n();
   const outer = useRef<HTMLDivElement>(null);
   const cardRefs = useRef(new Map<string, HTMLButtonElement>());
@@ -189,8 +200,8 @@ export default function Tunnel() {
     />
   );
 
-  if (!rich) {
-    // Reduced motion: the corridor unfolds into a calm vertical list.
+  if (!rich || !wide) {
+    // Reduced motion and phones: the corridor unfolds into a calm vertical list.
     return (
       <section id="work" className="tunnel-static container" aria-labelledby="work-title">
         <motion.header className="section-head" {...inView} variants={stagger(0.08)}>

@@ -796,8 +796,17 @@ button {
     border-radius: 0;
     border: 0;
   }
-  .chat-launcher span {
-    font-size: 0.92rem;
+}
+
+/* On phones the launcher shrinks to a round icon so it doesn't cover the content. */
+@media (max-width: 639px) {
+  .chat-launcher {
+    justify-content: center;
+    width: 52px;
+    padding: 0;
+  }
+  .chat-launcher-label {
+    display: none;
   }
 }
 
@@ -1201,9 +1210,10 @@ button {
 }
 .tcard-top {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px 12px;
   align-self: stretch;
 }
 .tcard-org {
@@ -1229,6 +1239,29 @@ button {
   line-height: 1.55;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+}
+.tcard-points {
+  display: grid;
+  gap: 6px;
+  max-width: 48ch;
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+.tcard-points span {
+  position: relative;
+  display: block;
+  padding-left: 16px;
+}
+.tcard-points span::before {
+  content: '';
+  position: absolute;
+  top: 0.7em;
+  left: 0;
+  width: 6px;
+  height: 1px;
+  background: var(--accent);
 }
 .tcard-more {
   display: inline-flex;
@@ -1325,132 +1358,80 @@ button {
 }
 .static-list {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
 }
 .static-list .tcard {
   width: 100%;
 }
 
-/* ---------- Skills constellation ---------- */
+/* ---------- Skills ---------- */
 .skills {
   position: relative;
   z-index: 3;
   padding-block: 20vh 12vh;
 }
-.skills-layout {
+.scard-grid {
   display: grid;
-  grid-template-columns: minmax(240px, 320px) 1fr;
-  align-items: center;
-  gap: 48px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 18px;
 }
-.skill-groups {
+/* Current focus areas get the wide slots, the foundations fill the row below. */
+.scard {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-}
-.skill-group {
-  position: relative;
-  isolation: isolate;
-  display: grid;
-  grid-template-columns: 34px 1fr auto;
-  align-items: center;
-  width: 100%;
-  padding: 15px 18px;
-  border: 0;
-  border-radius: 16px;
-  background: none;
-  color: var(--text-muted);
-  font-size: 1.04rem;
-  text-align: left;
-  cursor: pointer;
-  transition: color 0.25s var(--ease);
-}
-.skill-group[aria-pressed='true'] {
-  color: var(--text);
-}
-.skill-group-bg {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: 16px;
-  background: var(--group-bg);
-  box-shadow: inset 0 0 0 1px var(--border);
-}
-.skill-group-index,
-.skill-group-count {
-  color: var(--text-dim);
-  font-size: 0.76rem;
-  font-variant-numeric: tabular-nums;
-}
-.sky {
-  position: relative;
-  height: clamp(380px, 56vh, 540px);
+  gap: 18px;
+  grid-column: span 2;
+  padding: 26px 26px 24px;
   overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: 34px;
-  background: radial-gradient(ellipse at 50% 50%, var(--glow), transparent 70%);
+  border-radius: 24px;
+  background: var(--card-grad);
 }
-.sky-cloud {
+.scard:nth-child(-n + 2) {
+  grid-column: span 3;
+}
+.scard-index {
   position: absolute;
-  inset: 0;
+  top: 14px;
+  right: 22px;
+  color: var(--index-ink);
+  font: 400 4.2rem/1 var(--font-display);
+  pointer-events: none;
 }
-.star {
-  position: absolute;
-  translate: -50% -50%;
-  color: var(--text-muted);
-  font-size: 0.92rem;
-  white-space: nowrap;
+.scard-name {
+  padding-right: 64px;
+  font: 400 1.95rem/1.05 var(--font-display);
 }
-.star-drift {
-  display: inline-block;
+.scard-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.scard-items li {
   padding: 6px 13px;
   border: 1px solid var(--border);
   border-radius: 999px;
   background: var(--chip-bg);
-  animation: drift ease-in-out infinite alternate;
-}
-@keyframes drift {
-  0% {
-    transform: translate(-7px, 5px);
-  }
-  100% {
-    transform: translate(7px, -7px);
-  }
-}
-.sky.is-focused .star-drift {
-  filter: blur(1.5px);
-}
-.sky-focus {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
-  padding: 28px;
-  pointer-events: none;
-}
-.sky-focus-title {
-  font: 400 clamp(1.8rem, 3vw, 2.5rem) / 1.1 var(--font-display);
-  text-align: center;
-}
-.sky-focus-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  max-width: 560px;
-}
-.star.is-lit {
-  position: relative;
-  translate: none;
-  padding: 10px 18px;
-  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
-  border-radius: 999px;
-  background: var(--chip-lit-bg);
   color: var(--text);
-  font-size: 1.02rem;
+  font-size: 0.9rem;
+}
+.scard-proof {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.94rem;
+  line-height: 1.5;
+}
+.scard-proof-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--accent);
+  font: 500 0.7rem/1 var(--font-sans);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 /* ---------- Projects ---------- */
@@ -1461,22 +1442,11 @@ button {
 }
 .pcard-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
-/* Live projects get the wide slots, the archive fills the row below. */
 .pcard-slot {
   display: flex;
-  grid-column: span 2;
-}
-.pcard-slot:nth-child(-n + 2) {
-  grid-column: span 3;
-}
-.pcard-slot:nth-child(-n + 2) .pcard {
-  min-height: 300px;
-}
-.pcard-slot:nth-child(-n + 2) .pcard-name {
-  font-size: clamp(2.2rem, 3.4vw, 2.9rem);
 }
 .pcard {
   position: relative;
@@ -1491,6 +1461,13 @@ button {
   border-radius: 24px;
   background: var(--card-grad);
   transition: border-color 0.3s var(--ease);
+}
+button.pcard {
+  width: 100%;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
 }
 .pcard.is-link:hover {
   border-color: color-mix(in srgb, var(--accent) 40%, transparent);
@@ -1521,9 +1498,11 @@ button {
   transition: transform 0.3s var(--ease), background-color 0.3s var(--ease), color 0.3s var(--ease);
 }
 .pcard.is-link:hover .pcard-arrow {
-  transform: rotate(45deg);
   background: var(--accent);
   color: var(--accent-ink);
+}
+.pcard.is-link:hover .pcard-arrow:not(.is-chat) {
+  transform: rotate(45deg);
 }
 .pcard-name {
   margin-top: auto;
@@ -1534,6 +1513,27 @@ button {
   color: var(--text-muted);
   font-size: 0.94rem;
   line-height: 1.5;
+}
+.pcard-details {
+  display: grid;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+.pcard-details span {
+  position: relative;
+  display: block;
+  padding-left: 16px;
+}
+.pcard-details span::before {
+  content: '';
+  position: absolute;
+  top: 0.7em;
+  left: 0;
+  width: 6px;
+  height: 1px;
+  background: var(--accent);
 }
 .pcard-tags {
   display: flex;
@@ -1615,11 +1615,14 @@ button {
   .pcard-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .pcard-slot,
-  .pcard-slot:nth-child(-n + 2) {
+  .scard-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .scard,
+  .scard:nth-child(-n + 2) {
     grid-column: auto;
   }
-  .pcard-slot:last-child {
+  .scard:last-child {
     grid-column: 1 / -1;
   }
 }
@@ -1631,26 +1634,18 @@ button {
   .topbar-inner {
     justify-content: space-between;
   }
-  .skills-layout {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-  .skill-groups {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 @media (max-width: 720px) {
-  .pcard-grid {
+  .pcard-grid,
+  .scard-grid {
     grid-template-columns: 1fr;
   }
-  .pcard-slot,
-  .pcard-slot:nth-child(-n + 2) {
+  .scard,
+  .scard:nth-child(-n + 2) {
     grid-column: auto;
   }
-  .pcard,
-  .pcard-slot:nth-child(-n + 2) .pcard {
+  .pcard {
     min-height: 0;
   }
   .tunnel-rail {
@@ -1690,33 +1685,6 @@ button {
   .scroll-cue {
     display: none;
   }
-  .skill-groups {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .skill-group {
-    grid-template-columns: auto;
-    width: auto;
-    padding: 9px 14px;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    font-size: 0.9rem;
-  }
-  .skill-group-bg {
-    border-radius: 999px;
-  }
-  .skill-group-index,
-  .skill-group-count {
-    display: none;
-  }
-  .sky {
-    height: 470px;
-  }
-  .star {
-    font-size: 0.8rem;
-  }
   .dialog-root {
     padding: 10px;
     align-items: end;
@@ -1752,7 +1720,6 @@ button {
 
 @media (prefers-reduced-motion: reduce) {
   .grain,
-  .star-drift,
   .scroll-cue-line::after,
   .badge-now::before {
     animation: none;

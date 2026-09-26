@@ -4,7 +4,8 @@ import { type Project } from '../data/profile';
 import { useI18n } from '../i18n';
 import { useFinePointer, useRichMotion } from '../hooks';
 import { fadeUp, inView, stagger } from '../motion';
-import { ArrowUpRight } from './Icons';
+import { ArrowUpRight, ChatIcon } from './Icons';
+import { chatEnabled, openChat } from './ChatWidget';
 
 /** A card that tilts towards the pointer while a specular highlight slides across it. */
 function TiltCard({ project }: { project: Project }) {
@@ -12,6 +13,7 @@ function TiltCard({ project }: { project: Project }) {
   const fine = useFinePointer();
   const tilt = rich && fine;
   const { t } = useI18n();
+  const chat = project.opensChat && chatEnabled;
   // Pointer position inside the card, 0 → 1 on each axis.
   const mx = useMotionValue(0.5);
   const my = useMotionValue(0.5);
@@ -41,14 +43,24 @@ function TiltCard({ project }: { project: Project }) {
       <motion.span className="pcard-sheen" aria-hidden="true" style={{ background: sheen, opacity: sheenOpacity }} />
       <span className="pcard-top">
         <span className="pcard-year">{project.year ?? t.ongoing}</span>
-        {project.link && (
-          <span className="pcard-arrow" aria-hidden="true">
-            <ArrowUpRight width={18} height={18} />
+        {(project.link || chat) && (
+          <span className={chat ? 'pcard-arrow is-chat' : 'pcard-arrow'} aria-hidden="true">
+            {chat ? <ChatIcon width={16} height={16} /> : <ArrowUpRight width={18} height={18} />}
           </span>
         )}
       </span>
       <span className="pcard-name">{project.name}</span>
       <span className="pcard-desc">{project.description}</span>
+      {project.details && (
+        // Spans, not <ul>: the card can be a <button>, which only takes phrasing content.
+        <span className="pcard-details" role="list">
+          {project.details.map((d) => (
+            <span key={d} role="listitem">
+              {d}
+            </span>
+          ))}
+        </span>
+      )}
       <span className="pcard-tags">
         {project.tags.map((t) => (
           <span key={t}>{t}</span>
@@ -58,7 +70,7 @@ function TiltCard({ project }: { project: Project }) {
   );
 
   const props = {
-    className: project.link ? 'pcard is-link' : 'pcard',
+    className: project.link || chat ? 'pcard is-link' : 'pcard',
     style: tilt ? { rotateX, rotateY, transformPerspective: 900 } : undefined,
     onPointerMove: tilt ? onMove : undefined,
     onPointerEnter: tilt ? () => hover.set(1) : undefined,
@@ -67,7 +79,11 @@ function TiltCard({ project }: { project: Project }) {
 
   return (
     <motion.li variants={fadeUp} className="pcard-slot">
-      {project.link ? (
+      {chat ? (
+        <motion.button {...props} type="button" onClick={openChat} aria-haspopup="dialog" aria-label={`${project.name} — ${t.talkWithMe}`}>
+          {body}
+        </motion.button>
+      ) : project.link ? (
         <motion.a {...props} href={project.link.href} target="_blank" rel="noreferrer" aria-label={`${project.name} — ${project.link.label}`}>
           {body}
         </motion.a>

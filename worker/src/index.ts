@@ -36,7 +36,7 @@ function buildSystemPrompt(): string {
       return lines.join('\n');
     })
     .join('\n');
-  const skills = p.skills.map((s) => `- ${s.name}: ${s.items.join(', ')}`).join('\n');
+  const skills = p.skills.map((s) => `- ${s.name}: ${s.items.join(', ')}. ${s.evidence}`).join('\n');
   const education = p.education
     .map((e) => {
       const lines = [`- ${e.degree}, ${e.school} (${e.period})`, `  ${e.summary}`];
@@ -45,7 +45,7 @@ function buildSystemPrompt(): string {
       return lines.join('\n');
     })
     .join('\n');
-  const projects = p.projects.map((pr) => `- ${pr.name}${pr.year ? ` (${pr.year})` : ''}: ${pr.description}`).join('\n');
+  const projects = p.projects.map((pr) => `- ${pr.name}${pr.year ? ` (${pr.year})` : ''}: ${[pr.description, ...(pr.details ?? [])].join(' ')}`).join('\n');
 
   return `You are the assistant on ${p.name}'s personal website. Visitors (recruiters, clients, engineers) ask you about ${p.name}'s background.
 

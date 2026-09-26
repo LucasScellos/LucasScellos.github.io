@@ -2,7 +2,7 @@ import TopBar from './components/TopBar';
 import Hero from './components/Hero';
 import About from './components/About';
 import Tunnel from './components/Tunnel';
-import Constellation from './components/Constellation';
+import Skills from './components/Skills';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
 import ChatWidget from './components/ChatWidget';
@@ -21,7 +21,7 @@ export default function App() {
         <Hero />
         <About />
         <Tunnel />
-        <Constellation />
+        <Skills />
         <Projects />
       </main>
       <Contact />

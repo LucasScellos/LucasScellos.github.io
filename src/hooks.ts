@@ -16,6 +16,9 @@ function useMedia(query: string) {
 /** True on a mouse / trackpad (hover-capable, precise pointer). */
 export const useFinePointer = () => useMedia('(hover: hover) and (pointer: fine)');
 
+/** True above phone width, where the scroll-driven 3D corridor has room (and in-app browsers aren't the norm). */
+export const useWideScreen = () => useMedia('(min-width: 721px)');
+
 /** True when pointer-driven and scroll-driven 3D effects should run. */
 export function useRichMotion() {
   const reduced = useReducedMotion();
